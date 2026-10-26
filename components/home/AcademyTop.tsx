@@ -9,27 +9,6 @@ const PHONE = "010-3766-1620";
 const KAKAO = "http://pf.kakao.com/_xaNjrn/chat";
 const NAVER = "http://talk.naver.com/W5IPUB";
 
-// 그루밍노트식 주제 바로가기
-const ENTRIES = [
-  { no: "01", title: "미용·털 관리", desc: "셀프미용, 미용 주기와 종류", href: "/search?q=" + encodeURIComponent("미용"),
-    icon: <><circle cx="6" cy="6" r="3" /><circle cx="6" cy="18" r="3" /><path d="m8 8 12 12M8 16 20 4" /></> },
-  { no: "02", title: "목욕·홈케어", desc: "우리 강아지의 관리 습관", href: "/search?q=" + encodeURIComponent("목욕"),
-    icon: <><path d="M12 3s-7 8-7 12a7 7 0 0 0 14 0c0-4-7-12-7-12Z" /><path d="M9 16a3 3 0 0 0 3 3" /></> },
-  { no: "03", title: "자격증·진로", desc: "자격증부터 취업·창업까지", href: "/blog/category/" + encodeURIComponent("자격증"),
-    icon: <><rect x="4" y="3" width="16" height="14" rx="2" /><circle cx="12" cy="11" r="3" /><path d="m9 14-1 7 4-2 4 2-1-7M8 6h8" /></> },
-  { no: "04", title: "애견미용학원", desc: "지역별 위치와 수업 안내", href: "/blog/category/" + encodeURIComponent("애견미용학원"),
-    icon: <><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></> },
-];
-
-const COURSES = [
-  { icon: "✂️", name: ["애견미용", "자격증"], tone: "blue" },
-  { icon: "🍖", name: ["펫푸드", "레시피"], tone: "peach" },
-  { icon: "🐾", name: ["반려동물", "행동교정사"], tone: "mint" },
-  { icon: "🕊️", name: ["반려동물", "장례지도사"], tone: "lavender" },
-  { icon: "🌿", name: ["아로마", "테라피"], tone: "sage" },
-  { icon: "💼", name: ["취업연계", "창업컨설팅"], tone: "gold" },
-];
-
 const CURRICULUM = [
   { num: "1", name: "기초과정", sub: "입문 ~ 기본 그루밍", tag: "입문", tone: "blue" },
   { num: "2", name: "자격증 취득반", sub: "애견미용자격증 3급 · 2급", tag: "자격증", tone: "green" },
@@ -117,29 +96,6 @@ export default function AcademyTop() {
         </div>
         <span className="gn-hero-caption">ALL ABOUT PET GROOMING / 함께 배우는 반려견 관리</span>
       </section>
-
-      <div className="gn-wrap">
-        <section className="gn-entry-section" aria-label="관심 주제 바로 찾기">
-          {ENTRIES.map((en) => (
-            <a key={en.no} className="gn-entry" href={en.href}>
-              <span className="gn-entry-number">{en.no}</span>
-              <div><h2>{en.title}</h2><p>{en.desc}</p></div>
-              <svg viewBox="0 0 24 24" aria-hidden="true">{en.icon}</svg>
-            </a>
-          ))}
-        </section>
-      </div>
-
-      <div className="at-wrap">
-        <div className="at-courses">
-          {COURSES.map((c) => (
-            <a key={c.icon} href={`${SITE}/curriculum/`} target="_blank" rel="noopener noreferrer" className={`at-course at-cc-${c.tone}`}>
-              <span className="at-cc-icon">{c.icon}</span>
-              <span className="at-cc-name">{c.name[0]}<br />{c.name[1]}</span>
-            </a>
-          ))}
-        </div>
-      </div>
 
       {/* ── 커리큘럼 ── */}
       <section className="at-curr" aria-labelledby="at-curr-h">
