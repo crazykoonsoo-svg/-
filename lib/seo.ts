@@ -119,6 +119,7 @@ export function getCategoryMetadata(category: string, count: number): Metadata {
       description,
     },
     alternates: { canonical: `${SITE_URL}/blog/category/${encodeURIComponent(category)}` },
+    robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   };
 }
 
@@ -148,7 +149,7 @@ export function getTagMetadata(tag: string, count: number): Metadata {
     // 정작 알맹이가 있는 글 대신 이 목록 페이지가 검색결과에 노출되는 문제가
     // 생겼습니다. index: false로 태그 페이지 자체는 검색결과에서 빼고,
     // follow: true로 내부 링크(글로 이어지는 경로)는 계속 따라가게 둡니다.
-    robots: { index: false, follow: true },
+    robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   };
 }
 

@@ -5,6 +5,7 @@ import { getAllPosts, getTags } from "@/lib/posts";
 import { getTagMetadata } from "@/lib/seo";
 import PostCard from "@/components/blog/PostCard";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
   const tags = await getTags();
@@ -13,7 +14,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { tag: string } }): Promise<Metadata> {
   const name = decodeURIComponent(params.tag);
-  const posts = (await getAllPosts()).filter((p) => p.tags.includes(name));
+  const posts = (await getAllPosts()).filter((p) => p.tags.some((tag) => tag.toLowerCase() === name.toLowerCase()));
   return getTagMetadata(name, posts.length);
 }
 
@@ -22,6 +23,8 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
   const posts = (await getAllPosts()).filter(
     (p) => p.tags.some((t) => t.toLowerCase() === tag.toLowerCase())
   );
+
+  if (posts.length === 0) notFound();
 
   return (
     <>
