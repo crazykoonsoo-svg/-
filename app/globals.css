@@ -281,3 +281,11 @@
 .blog-content a.cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 260px; max-width: 100%; padding: 15px 28px; border-radius: 999px; background: #173a3e; color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; line-height: 1.4; box-shadow: 0 6px 18px rgba(23,58,62,.18); transition: background-color .2s ease, transform .2s ease; }
 .blog-content a.cta-btn:hover { background: #176968 !important; color: #fff; transform: translateY(-1px); }
 .blog-content a.cta-btn::after { display: none; }
+
+/* Rich-text emphasis inside CTA buttons must retain readable button text. */
+.blog-content a.cta-btn strong,
+.blog-content a.cta-btn em,
+.blog-content a.cta-btn span {
+  color: inherit !important;
+  -webkit-text-fill-color: currentColor;
+}
