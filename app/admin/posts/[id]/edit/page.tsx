@@ -1,85 +1,62 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
-  const [pw, setPw] = useState("");
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  // 이전에는 비밀번호를 브라우저 코드 안에서 직접 비교했습니다 — 즉 누구나
-  // 개발자도구로 소스를 보면 비밀번호가 그대로 보이는 상태였습니다.
-  // 이제는 서버(/api/admin/login)로 보내 서버에서만 비교합니다.
-  const handleLogin = async () => {
-    if (!pw.trim() || loading) return;
-    setLoading(true);
+export default function EditPostPage({ params }: { params: { id: string } }) {
+  const router = useRouter();
+  const [post, setPost] = useState<any>(null);
+  const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
+  useEffect(() => {
+    let active = true;
+    fetch("/api/posts?admin=true", { cache: "no-store" })
+      .then(async r => { if (!r.ok) throw new Error("글을 불러올 수 없습니다."); return r.json(); })
+      .then(({ posts }) => {
+        if (!active) return;
+        const found = posts.find((p: any) => String(p.id) === params.id);
+        if (!found) throw new Error("글을 찾을 수 없습니다.");
+        setPost(found);
+      }).catch(e => { if (active) setError(e.message); });
+    return () => { active = false; };
+  }, [params.id]);
+  const change = (key: string, value: string) => setPost((p: any) => ({ ...p, [key]: value }));
+  const save = async () => {
+    if (!post.title.trim() || !post.content.trim()) { setError("제목과 본문을 입력해 주세요."); return; }
+    setSaving(true); setError("");
     try {
-      const res = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: pw }),
+      const res = await fetch(`/api/posts/${params.id}`, {
+        method: "PUT", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: post.title, slug: post.slug, excerpt: post.excerpt,
+          content: post.content, category: post.category, tags: post.tags,
+          coverImage: post.cover_image, coverImageAlt: post.cover_image_alt,
+          status: post.status, metaTitle: post.meta_title, metaDescription: post.meta_description
+        })
       });
-      if (res.ok) {
-        window.location.href = "/admin";
-      } else {
-        setError(true);
-        setPw("");
-      }
-    } finally {
-      setLoading(false);
-    }
+      if (!res.ok) throw new Error("저장하지 못했습니다. 입력 내용을 유지했습니다.");
+      router.push(`/blog/${post.slug}`); router.refresh();
+    } catch (e: any) { setError(e.message); } finally { setSaving(false); }
   };
-
-  return (
-    <div style={{
-      position: "fixed", top: 0, left: 0, right: 0, bottom: 0,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      background: "#f3f4f6"
-    }}>
-      <div style={{
-        background: "#fff", padding: "40px 36px", borderRadius: "16px",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.10)", width: "340px"
-      }}>
-        <div style={{ textAlign: "center", marginBottom: "28px" }}>
-          <div style={{ fontSize: "32px", marginBottom: "8px" }}>🔐</div>
-          <h1 style={{ fontSize: "20px", fontWeight: 700, color: "#111827", margin: 0 }}>관리자 로그인</h1>
-          <p style={{ fontSize: "13px", color: "#6b7280", marginTop: "6px" }}>비밀번호를 입력하세요</p>
-        </div>
-
-        <input
-          type="password"
-          value={pw}
-          onChange={(e) => { setPw(e.target.value); setError(false); }}
-          onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-          placeholder="비밀번호"
-          autoFocus
-          style={{
-            display: "block", width: "100%", padding: "12px 14px",
-            fontSize: "15px", border: error ? "1.5px solid #ef4444" : "1.5px solid #d1d5db",
-            borderRadius: "8px", outline: "none", marginBottom: "10px",
-            boxSizing: "border-box", color: "#111827"
-          }}
-        />
-
-        {error && (
-          <p style={{ color: "#ef4444", fontSize: "13px", marginBottom: "10px", textAlign: "center" }}>
-            ❌ 비밀번호가 틀렸습니다.
-          </p>
-        )}
-
-        <button
-          onClick={handleLogin}
-          disabled={loading}
-          style={{
-            display: "block", width: "100%", padding: "13px",
-            fontSize: "15px", fontWeight: 600, background: "#2563eb",
-            color: "#fff", border: "none", borderRadius: "8px",
-            cursor: loading ? "default" : "pointer", marginTop: "4px",
-            opacity: loading ? 0.7 : 1
-          }}
-        >
-          {loading ? "확인 중..." : "로그인"}
-        </button>
-      </div>
-    </div>
-  );
+  if (!post) return <div className="max-w-4xl mx-auto p-8">{error || "글을 불러오는 중입니다."}</div>;
+  const fields = [
+    ["title", "제목"], ["excerpt", "글 요약"], ["meta_title", "메타 제목"],
+    ["meta_description", "메타 설명"]
+  ];
+  return <main className="max-w-4xl mx-auto px-5 py-10 space-y-6">
+    <a href="/admin">← 관리자</a>
+    <h1 className="text-2xl font-bold">게시물 수정</h1>
+    <p className="text-sm text-gray-500">/blog/{post.slug}</p>
+    {fields.map(([key, label]) => <label key={key} className="block">
+      <span className="block font-semibold mb-2">{label}</span>
+      <input className="w-full border rounded-lg p-3" value={post[key] || ""} onChange={e => change(key, e.target.value)} />
+    </label>)}
+    <label className="block"><span className="block font-semibold mb-2">본문 HTML</span>
+      <textarea className="w-full border rounded-lg p-3 font-mono text-sm" rows={24} value={post.content || ""} onChange={e => change("content", e.target.value)} />
+    </label>
+    <details><summary className="cursor-pointer font-semibold">본문 미리보기</summary>
+      <div className="blog-content border rounded-lg p-6 mt-4" dangerouslySetInnerHTML={{ __html: post.content }} />
+    </details>
+    {error && <p role="alert" className="text-red-600">{error}</p>}
+    <button type="button" disabled={saving} onClick={save} className="bg-teal-dark text-white rounded-lg px-6 py-3 disabled:opacity-50">{saving ? "저장 중..." : "수정 저장"}</button>
+  </main>;
 }
