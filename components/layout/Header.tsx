@@ -1,0 +1,83 @@
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import EducationPopup from "@/components/ui/EducationPopup";
+
+const LOGO_URL = "/icon.png";
+
+const NAV = [
+  { href: "/", label: "홈" },
+  { href: "/blog/category/자격증", label: "자격증" },
+  { href: "/blog/category/애견미용학원", label: "애견미용학원" },
+  { href: "/blog/category/취업·창업", label: "취업·창업" },
+  { href: "/blog/category/비용", label: "비용" },
+  { href: "/blog/category/국비지원", label: "국비지원" },
+  { href: "/search", label: "검색" },
+];
+
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <header className="sticky top-0 z-50 bg-white/[.97] border-b border-line backdrop-blur">
+      <div className="max-w-[1160px] mx-auto px-5 lg:px-6">
+        <div className="flex items-center gap-3 sm:gap-6 min-h-[64px] sm:min-h-[72px] lg:min-h-[84px]">
+          {/* 로고 */}
+          <Link href="/" className="flex items-center gap-2.5 shrink-0 hover:opacity-90 transition-opacity">
+            <Image src={LOGO_URL} alt="애견미용 관련 모든정보" width={40} height={40}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-[10px] object-cover" />
+            <span className="leading-tight">
+              <span className="block text-[17px] sm:text-[19px] lg:text-[21px] font-bold tracking-[-1px] text-ink whitespace-nowrap">
+                애견미용 관련 <span className="text-coral">모든정보</span>
+              </span>
+              <small className="block text-[9px] sm:text-[10px] tracking-[1.6px] sm:tracking-[2px] mt-1 font-medium text-muted">ALL ABOUT PET GROOMING</small>
+            </span>
+          </Link>
+
+          {/* 데스크탑 네비게이션 */}
+          <nav className="hidden lg:flex items-center gap-6 ml-4 text-[15px] font-medium text-ink" aria-label="주요 메뉴">
+            {NAV.map((n) => (
+              <Link key={n.href} href={n.href} className="py-2 hover:text-teal transition-colors whitespace-nowrap">
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* 우측 CTA */}
+          <div className="ml-auto flex items-center gap-1.5 shrink-0">
+            <div className="hidden sm:block">
+              <EducationPopup variant="header" />
+            </div>
+            <a href="https://evaw-pet-grooming.co.kr/" target="_blank" rel="noopener noreferrer"
+              className="hidden sm:inline-block text-[13px] font-semibold text-white bg-teal-dark hover:bg-teal px-3.5 py-2 rounded-md transition-colors whitespace-nowrap">
+              상담문의
+            </a>
+            <button className="lg:hidden p-2 ml-1 text-ink"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "메뉴 닫기" : "메뉴 열기"}>
+              {menuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+
+        {/* 모바일 메뉴 */}
+        {menuOpen && (
+          <div className="lg:hidden border-t border-line py-3">
+            {NAV.map((n) => (
+              <Link key={n.href} href={n.href} className="block text-[15px] font-medium text-ink py-2.5 border-b border-gray-100 last:border-0"
+                onClick={() => setMenuOpen(false)}>
+                {n.label}
+              </Link>
+            ))}
+            <div className="py-2.5" onClick={() => setMenuOpen(false)}>
+              <EducationPopup variant="mobile" />
+            </div>
+            <Link href="/admin" className="block text-sm text-muted py-2" onClick={() => setMenuOpen(false)}>관리자</Link>
+          </div>
+        )}
+      </div>
+    </header>
+  );
+}
