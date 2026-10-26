@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { getPostExtraFields } from "@/lib/post-extra-fields";
 
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
@@ -12,9 +13,17 @@ function getSupabase() {
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const supabase = getSupabase();
     const body = await req.json();
+    let extraFields;
+    try {
+      if (!body || typeof body !== "object" || Array.isArray(body)) throw new TypeError("잘못된 수정 요청입니다.");
+      extraFields = getPostExtraFields(body);
+    } catch (error) {
+      return NextResponse.json({ error: (error as Error).message }, { status: 400 });
+    }
+    const supabase = getSupabase();
     const { data, error } = await supabase.from("posts").update({
+      ...extraFields,
       title: body.title, slug: body.slug, excerpt: body.excerpt,
       content: body.content, category: body.category, tags: body.tags,
       cover_image: body.coverImage, cover_image_alt: body.coverImageAlt,

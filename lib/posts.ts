@@ -1,4 +1,5 @@
 import { Post, Category, Tag } from "@/types/post";
+import { getPostExtraFields } from "@/lib/post-extra-fields";
 
 // 목록/집계용 조회에서는 글 본문(content)처럼 무거운 컬럼을 빼고 가져옵니다.
 // content를 매번 select("*")로 통째로 가져오면 홈페이지·사이트맵·카테고리 집계 등
@@ -141,6 +142,7 @@ export async function updatePost(id: string, data: Partial<Post>): Promise<Post 
   const supabase = getSupabase();
   if (!supabase) return null;
   const { data: updated, error } = await supabase.from("posts").update({
+    ...getPostExtraFields(data),
     title: data.title, slug: data.slug, excerpt: data.excerpt,
     content: data.content, category: data.category, tags: data.tags,
     cover_image: data.coverImage, status: data.status,

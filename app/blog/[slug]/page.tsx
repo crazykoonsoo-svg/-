@@ -40,6 +40,15 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const post = await getPostBySlug(params.slug);
   if (!post || post.status !== "published") notFound();
 
+  // Count distinct published articles, matching the single-tag redirect query.
+  const publishedPosts = await getAllPosts();
+  const tagCounts = new Map<string, number>();
+  for (const publishedPost of publishedPosts) {
+    for (const tag of Array.from(new Set(publishedPost.tags))) {
+      tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+    }
+  }
+
   const relatedPosts = await getRelatedPosts(post);
   const { prev, next } = await getAdjacentPosts(params.slug);
 
@@ -89,7 +98,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <Tag size={14} />
                     {post.tags.map((tag) => (
-                      <a key={tag} href={`/blog/tag/${encodeURIComponent(tag)}`} className="hover:text-blue-600">#{tag}</a>
+                      (tagCounts.get(tag) ?? 0) >= 2 ? (
+                        <a key={tag} href={`/blog/tag/${encodeURIComponent(tag)}`} className="hover:text-blue-600">#{tag}</a>
+                      ) : <span key={tag}>#{tag}</span>
                     ))}
                   </div>
                 )}
@@ -139,7 +150,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 <h3 className="text-sm font-semibold text-gray-500 mb-3">태그</h3>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag) => (
-                    <a key={tag} href={`/blog/tag/${encodeURIComponent(tag)}`} className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors">#{tag}</a>
+                    (tagCounts.get(tag) ?? 0) >= 2 ? (
+                      <a key={tag} href={`/blog/tag/${encodeURIComponent(tag)}`} className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full hover:bg-blue-100 hover:text-blue-700 transition-colors">#{tag}</a>
+                    ) : <span key={tag} className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-full">#{tag}</span>
                   ))}
                 </div>
               </div>
