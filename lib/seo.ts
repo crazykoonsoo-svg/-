@@ -4,7 +4,8 @@ import { Metadata } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.evaw-pet-grooming.com";
 const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "애견미용 관련 모든정보";
-const SITE_DESCRIPTION = process.env.NEXT_PUBLIC_SITE_DESCRIPTION || "애견미용학원 자격증·비용·국비지원·취업·창업·추천 정보를 한곳에서 확인하세요. 3급·2급 동시취득, 가정견 실습, 취업 연계까지 2026년 최신 정보. 서울·인천·부산·대구·광주·대전·수원·노원·강남 등 전국 지역 정보 제공.";
+const SITE_DESCRIPTION = "이바우펫 애견미용학원 3·2급 애견미용자격증 취득 및 가정견 실습, 개별 맞춤 교육을 제공하며, 전국 20개 지점이 운영됩니다. 국비지원·교육지원·비용·기간 등. 자세히 알아보세요.";
+const SITE_KEYWORDS = ["애견미용학원", "애견미용", "이바우펫", "애견미용사", "애견미용자격증", "가정견실습", "애견미용창업", "애견미용교육", "애견미용취업", "반려동물행동교정", "강남애견미용학원", "서울애견미용학원", "종로애견미용학원", "신림애견미용학원", "천호애견미용학원", "인천애견미용학원", "부천애견미용학원", "일산애견미용학원", "분당애견미용학원", "수원애견미용학원", "평택애견미용학원", "대전애견미용학원", "천안애견미용학원", "광주애견미용학원", "창원애견미용학원", "부산애견미용학원", "대구애견미용학원", "국비지원", "펫미용", "반려견미용", "애견미용학원추천"];
 const AUTHOR_NAME = process.env.NEXT_PUBLIC_AUTHOR_NAME || "이바우펫 애견미용학원";
 
 export function getDefaultMetadata(): Metadata {
@@ -12,7 +13,7 @@ export function getDefaultMetadata(): Metadata {
     metadataBase: new URL(SITE_URL),
     title: { absolute: SITE_NAME },
     description: SITE_DESCRIPTION,
-    keywords: ["애견미용학원", "애견미용자격증", "애견미용사", "국비지원", "펫미용", "반려견미용", "애견미용학원추천"],
+    keywords: SITE_KEYWORDS,
     authors: [{ name: AUTHOR_NAME }],
     creator: AUTHOR_NAME,
     publisher: SITE_NAME,
@@ -151,4 +152,4 @@ export function getTagMetadata(tag: string, count: number): Metadata {
   };
 }
 
-export { SITE_URL, SITE_NAME, SITE_DESCRIPTION, AUTHOR_NAME };
+export { SITE_URL, SITE_NAME, SITE_DESCRIPTION, SITE_KEYWORDS, AUTHOR_NAME };

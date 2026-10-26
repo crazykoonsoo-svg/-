@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_DESCRIPTION, SITE_KEYWORDS } from "@/lib/seo";
 import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -19,8 +20,8 @@ export const metadata: Metadata = {
     default: "애견미용 자격증·국비지원·학원 정보 | 애견미용 관련 모든정보",
     template: "%s | 애견미용 관련 모든정보",
   },
-  description: "애견미용학원 자격증·비용·국비지원·취업·창업·추천 정보를 한곳에서. 서울·인천·부산·대구·광주·대전·수원·노원·강남 등 전국 지역 정보 제공.",
-  keywords: ["애견미용학원", "애견미용자격증", "애견미용사", "국비지원", "펫미용", "반려견미용"],
+  description: SITE_DESCRIPTION,
+  keywords: SITE_KEYWORDS,
   authors: [{ name: "이바우펫 애견미용학원" }],
   creator: "이바우펫 애견미용학원",
   publisher: "애견미용 관련 모든정보",
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
     url: "https://www.evaw-pet-grooming.com",
     siteName: "애견미용 관련 모든정보",
     title: "애견미용 자격증·국비지원·학원 정보 | 애견미용 관련 모든정보",
-    description: "애견미용학원 자격증·비용·국비지원·취업·창업·추천 정보를 한곳에서. 서울·인천·부산·대구·광주·대전·수원·노원·강남 등 전국 지역 정보 제공.",
+    description: SITE_DESCRIPTION,
     images: [
       {
         url: "/hero-banner.png",
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "애견미용 자격증·국비지원·학원 정보 | 애견미용 관련 모든정보",
-    description: "애견미용학원 자격증·비용·국비지원·취업·창업·추천 정보를 한곳에서. 서울·인천·부산·대구·광주·대전·수원·노원·강남 등 전국 지역 정보 제공.",
+    description: SITE_DESCRIPTION,
     images: ["/hero-banner.png"],
   },
   alternates: {
