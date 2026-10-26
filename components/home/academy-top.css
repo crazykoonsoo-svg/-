@@ -269,7 +269,7 @@
     background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-    animation: gn-text-pearl 9s ease-in-out infinite alternate;
+    animation: gn-text-pearl 3s ease-in-out infinite alternate;
   }
   .gn-hero h1 em {
     color: inherit;
