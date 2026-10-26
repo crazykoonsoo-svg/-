@@ -24,7 +24,7 @@ export default async function HomePage() {
       <AcademyTop />
 
       {/* ── 글 목록 ── */}
-      <section className={`${WRAP} py-[72px]`}>
+      <section id="recommended-posts" className={`${WRAP} py-[72px] scroll-mt-24`}>
         <div className="flex flex-wrap items-end justify-between gap-6 mb-7">
           <div>
             <p className="text-[11px] tracking-[1.65px] font-semibold text-teal mb-2.5">THE PET GROOMING LIBRARY</p>

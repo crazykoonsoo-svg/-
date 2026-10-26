@@ -86,20 +86,18 @@ export default function AcademyTop() {
         <img className="gn-hero-image" src="/hero-banner.png" width={2172} height={724} alt="밝은 공간에서 함께 있는 슈나우저, 골든리트리버, 포메라니안, 비숑" fetchPriority="high" />
         <div className="gn-hero-veil" />
         <div className="gn-wrap gn-hero-content">
-          <p className="gn-eyebrow"><span />반려견 미용을 위한 작은 기록</p>
-          <h1 id="gn-hero-title">우리 강아지에게 맞는<br /><em>미용 정보</em>를 찾아보세요.</h1>
-          <p className="gn-hero-desc">매일의 목욕과 털 관리부터<br className="gn-mbr" /> 애견미용사의 첫걸음까지.</p>
+          <p className="gn-eyebrow"><span />애견미용학원 모든 정보</p>
+          <h1 id="gn-hero-title">전국 애견미용학원<br /><em>비용과 기간, 위치, 혜택까지</em> 찾아보세요.</h1>
+          <p className="gn-hero-desc">국비지원/교육지원/애견미용자격증/취업/창업 까지!</p>
           <form className="gn-search" role="search" onSubmit={(e) => { e.preventDefault(); go(query); }}>
-            <label className="sr-only" htmlFor="gn-search">미용 정보 검색</label>
+            <label className="sr-only" htmlFor="gn-search">애견미용학원 정보 검색</label>
             <svg className="gn-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7.2" /><path d="m16 16 5 5" /></svg>
-            <input id="gn-search" type="search" placeholder="미용 주기, 목욕, 자격증 검색" autoComplete="off" maxLength={100}
+            <input id="gn-search" type="search" placeholder="국비지원, 기간, 비용" autoComplete="off" maxLength={100}
               value={query} onChange={(e) => setQuery(e.target.value)} />
             <button type="submit">검색</button>
           </form>
-          <div className="gn-quick"><span>바로 찾기</span>
-            {[["미용 주기", "미용 주기"], ["목욕", "목욕"], ["3급", "자격증 3급"]].map(([q, label]) => (
-              <button key={q} type="button" onClick={() => go(q)}>{label}</button>
-            ))}
+          <div className="gn-quick"><span>바로찾기</span>
+            <button type="button" onClick={() => document.getElementById("recommended-posts")?.scrollIntoView({ behavior: "smooth", block: "start" })}>추천게시물</button>
           </div>
 
           {/* 추가: 상담 버튼 + 신뢰 지표 */}
