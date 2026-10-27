@@ -26,6 +26,15 @@ const nextConfig = {
   // trailing slash 정책
   trailingSlash: false,
 
+  // Preserve the original Incheon article URL after its slug was renamed.
+  async redirects() {
+    return [{
+      source: "/blog/%EC%9D%B8%EC%B2%9C%EC%95%A0%EA%B2%AC%EB%AF%B8%EC%9A%A9%ED%95%99%EC%9B%90-20260515-020",
+      destination: "/blog/petgrooming-20260515-020",
+      statusCode: 301,
+    }];
+  },
+
   // 보안 헤더
   async headers() {
     return [
