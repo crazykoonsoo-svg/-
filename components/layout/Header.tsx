@@ -2,7 +2,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Phone, MessageCircle } from "lucide-react";
+import { usePathname } from "next/navigation";
 import EducationPopup from "@/components/ui/EducationPopup";
 
 const LOGO_URL = "/icon.png";
@@ -17,8 +18,26 @@ const NAV = [
   { href: "/search", label: "검색" },
 ];
 
+function ContactButtons() {
+  const circle = "flex h-12 w-12 shrink-0 flex-col items-center justify-center gap-0.5 rounded-full text-[10px] font-bold leading-none shadow-sm transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-teal";
+  return (
+    <nav className="flex items-center gap-2" aria-label="빠른 상담">
+      <a href="tel:010-3766-1620" aria-label="전화 상담 010-3766-1620" title="010-3766-1620" className={`${circle} bg-teal-dark text-white`}>
+        <Phone size={17} aria-hidden="true" /><span>전화</span>
+      </a>
+      <a href="https://pf.kakao.com/_xaNjrn/chat" target="_blank" rel="noopener noreferrer" aria-label="카카오톡 상담 (새 창)" className={`${circle} bg-[#FEE500] text-[#191919]`}>
+        <MessageCircle size={18} fill="currentColor" aria-hidden="true" /><span>카톡</span>
+      </a>
+      <a href="https://talk.naver.com/W5IPUB" target="_blank" rel="noopener noreferrer" aria-label="네이버 톡톡 상담 (새 창)" className={`${circle} bg-[#03C75A] text-[#00391B]`}>
+        <span className="text-[19px] font-black" aria-hidden="true">N</span><span>네이버</span>
+      </a>
+    </nav>
+  );
+}
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const isHome = usePathname() === "/";
 
   return (
     <header className="sticky top-0 z-50 bg-white/[.97] border-b border-line backdrop-blur">
@@ -48,7 +67,7 @@ export default function Header() {
           {/* 우측 CTA */}
           <div className="ml-auto flex items-center gap-1.5 shrink-0">
             <div className="hidden sm:block">
-              <EducationPopup variant="header" />
+              {isHome ? <ContactButtons /> : <EducationPopup variant="header" />}
             </div>
             <a href="https://evaw-pet-grooming.co.kr/" target="_blank" rel="noopener noreferrer"
               className="hidden sm:inline-block text-[13px] font-semibold text-white bg-teal-dark hover:bg-teal px-3.5 py-2 rounded-md transition-colors whitespace-nowrap">
@@ -62,6 +81,12 @@ export default function Header() {
           </div>
         </div>
 
+        {isHome && (
+          <div className="flex justify-end pb-3 sm:hidden">
+            <ContactButtons />
+          </div>
+        )}
+
         {/* 모바일 메뉴 */}
         {menuOpen && (
           <div className="lg:hidden border-t border-line py-3">
@@ -71,9 +96,11 @@ export default function Header() {
                 {n.label}
               </Link>
             ))}
-            <div className="py-2.5" onClick={() => setMenuOpen(false)}>
-              <EducationPopup variant="mobile" />
-            </div>
+            {!isHome && (
+              <div className="py-2.5" onClick={() => setMenuOpen(false)}>
+                <EducationPopup variant="mobile" />
+              </div>
+            )}
             <Link href="/admin" className="block text-sm text-muted py-2" onClick={() => setMenuOpen(false)}>관리자</Link>
           </div>
         )}

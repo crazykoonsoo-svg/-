@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { getAllPosts, getCategories, getPopularPosts, getTags } from "@/lib/posts";
 import PostCard from "@/components/blog/PostCard";
-import EducationPopup from "@/components/ui/EducationPopup";
 import AcademyTop from "@/components/home/AcademyTop";
 import PostPager from "@/components/home/PostPager";
 import type { Metadata } from "next";
@@ -110,7 +109,6 @@ export default async function HomePage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-2.5 md:justify-self-end">
-            <EducationPopup variant="sidebar" />
             <a href="https://evaw-pet-grooming.co.kr/" target="_blank" rel="noopener noreferrer"
               className="w-full text-center py-3 px-6 text-sm font-semibold text-teal-dark bg-white border border-[#b8cbc7] rounded-lg hover:bg-wash transition-colors whitespace-nowrap">
               무료 상담 신청
