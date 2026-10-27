@@ -18,7 +18,7 @@ export default function AboutPage() {
           <p className="text-gray-700 leading-relaxed">
             <strong>애견미용 관련 모든정보</strong>는 애견미용을 배우고 싶은 분, 자격증 취득을 준비하는 분,
             학원 선택을 고민하는 분들을 위한 전문 정보 블로그입니다.
-            국비지원, KAPP 협회지원, 비용 비교, 지역별 학원 정보 등
+            국비지원, 사단법인한국유기견구호연맹지원, 비용 비교, 지역별 학원 정보 등
             실제 수강생 관점에서 현실적인 정보를 제공합니다.
           </p>
         </section>
@@ -28,7 +28,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
               { icon: "🎓", title: "애견미용 자격증", desc: "3급·2급·1급 취득 과정과 현실적인 준비 방법" },
-              { icon: "💰", title: "국비지원·교육비 절감", desc: "내일배움카드, KAPP 협회지원 활용 가이드" },
+              { icon: "💰", title: "국비지원·교육비 절감", desc: "내일배움카드, 사단법인한국유기견구호연맹지원 활용 가이드" },
               { icon: "🏫", title: "지역별 학원 정보", desc: "전국 주요 지역 애견미용학원 비교 및 선택 기준" },
               { icon: "💼", title: "취업·창업 준비", desc: "자격증 취득 후 취업 연계, 펫샵 창업 현실 정보" },
             ].map((item) => (
