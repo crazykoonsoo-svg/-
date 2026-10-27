@@ -96,6 +96,7 @@ export async function getCategories(posts?: Post[]): Promise<Category[]> {
   const list = posts ?? (await getAllPosts());
   const map: Record<string, number> = {};
   list.forEach((p) => { map[p.category] = (map[p.category] ?? 0) + 1; });
+  map["이바우펫"] ??= 0;
   return Object.entries(map).map(([name, count]) => ({ name, slug: encodeURIComponent(name), count }));
 }
 

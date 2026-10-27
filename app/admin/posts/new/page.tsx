@@ -21,7 +21,7 @@ const Editor = dynamic(() => import("@/components/admin/Editor"), {
   ),
 });
 
-const CATEGORIES = ["교육", "자격증", "국비지원", "비용", "취업·창업", "애견미용학원"];
+const CATEGORIES = ["교육", "자격증", "국비지원", "비용", "취업·창업", "애견미용학원", "이바우펫"];
 
 // 키워드분석/SEO점수/SEO설정/GEO최적화/내부링크/링크카드/AEO/대표이미지 — 메인 작성창 하단 탭으로 통합
 const TOOL_TABS: { key: string; label: string }[] = [
