@@ -46,6 +46,11 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     <a href="/admin">← 관리자</a>
     <h1 className="text-2xl font-bold">게시물 수정</h1>
     <p className="text-sm text-gray-500">/blog/{post.slug}</p>
+    <label className="block"><span className="block font-semibold mb-2">카테고리</span>
+      <select className="w-full border rounded-lg p-3" value={post.category || ""} onChange={e => change("category", e.target.value)}>
+        {Array.from(new Set([post.category, "교육", "자격증", "국비지원", "비용", "취업·창업", "애견미용학원", "이바우펫"].filter(Boolean))).map(category => <option key={category} value={category}>{category}</option>)}
+      </select>
+    </label>
     {fields.map(([key, label]) => <label key={key} className="block">
       <span className="block font-semibold mb-2">{label}</span>
       <input className="w-full border rounded-lg p-3" value={post[key] || ""} onChange={e => change(key, e.target.value)} />
