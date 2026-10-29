@@ -1,6 +1,6 @@
 "use client";
 // 메인 상단: 그루밍노트식 히어로 + 이바우펫 본사이트의 과목·커리큘럼·비용 영역
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "./academy-top.css";
@@ -62,7 +62,8 @@ function track(label: string) {
   }
 }
 
-export default function AcademyTop() {
+// children: 첫 화면(히어로)과 커리큘럼 사이에 넣을 내용 (메인 글 목록)
+export default function AcademyTop({ children }: { children?: ReactNode }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const go = (q: string) => { if (q.trim()) router.push(`/search?q=${encodeURIComponent(q.trim())}`); };
@@ -103,7 +104,7 @@ export default function AcademyTop() {
     if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const targets = Array.from(document.querySelectorAll<HTMLElement>(
-      ".at-curr .at-wrap, .at-enroll .at-wrap, #recommended-posts, #recommended-posts ~ section"
+      "#recommended-posts, .at-curr .at-wrap, .at-enroll .at-wrap, .at ~ section"
     )).filter((el) => el.getBoundingClientRect().top > window.innerHeight);
     targets.forEach((el) => el.classList.add("sg-rv"));
     const io = new IntersectionObserver((entries) => {
@@ -165,6 +166,8 @@ export default function AcademyTop() {
           </div>
         </div>
       </section>
+
+      {children}
 
       {/* ── 커리큘럼 ── */}
       <section className="at-curr" aria-labelledby="at-curr-h">
