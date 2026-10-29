@@ -39,7 +39,7 @@ export default async function HomePage() {
             <Link href="/" className="px-[17px] py-[7px] rounded-full text-sm bg-teal-dark border border-teal-dark text-white">전체</Link>
             {categories.map((cat) => (
               <Link key={cat.slug} href={`/blog/category/${cat.slug}`}
-                className="px-[17px] py-[7px] rounded-full text-sm bg-white border border-line text-muted hover:bg-wash hover:border-[#a9c8c3] transition-colors whitespace-nowrap">
+                className="px-[17px] py-[7px] rounded-full text-sm bg-white border border-line text-muted hover:bg-wash hover:border-[#a9d9bd] transition-colors whitespace-nowrap">
                 {cat.name}
               </Link>
             ))}
@@ -52,7 +52,7 @@ export default async function HomePage() {
             {posts.map((post) => <PostCard key={post.slug} post={post} />)}
           </PostPager>
         ) : posts.length === 0 ? (
-          <div className="text-center py-14 px-6 border border-dashed border-[#cad7d4] rounded-[10px]">
+          <div className="text-center py-14 px-6 border border-dashed border-[#c8dccf] rounded-[10px]">
             <h3 className="text-[21px] font-bold">아직 등록된 글이 없습니다.</h3>
             <p className="text-muted mt-3">곧 새로운 정보로 찾아올게요.</p>
           </div>
@@ -87,7 +87,7 @@ export default async function HomePage() {
                 <div className="flex flex-wrap gap-2">
                   {tags.map((tag) => (
                     <Link key={tag.slug} href={`/blog/tag/${tag.slug}`}
-                      className="text-[13px] px-3.5 py-1.5 bg-white border border-line rounded-full text-ink hover:border-[#a9c8c3] hover:text-teal transition-colors">
+                      className="text-[13px] px-3.5 py-1.5 bg-white border border-line rounded-full text-ink hover:border-[#a9d9bd] hover:text-teal transition-colors">
                       #{tag.name}
                     </Link>
                   ))}
@@ -100,7 +100,7 @@ export default async function HomePage() {
 
       {/* ── 진로 CTA ── */}
       <section className={`${WRAP} py-[72px]`}>
-        <div className="grid md:grid-cols-[1.2fr_1fr] gap-8 items-center rounded-[14px] border border-line p-8 md:p-12 bg-[linear-gradient(120deg,#ffffff_0%,#f3f7f7_100%)]">
+        <div className="grid md:grid-cols-[1.2fr_1fr] gap-8 items-center relative overflow-hidden rounded-[28px] border border-[#cfe6d8] p-8 md:p-12 bg-[radial-gradient(520px_320px_at_92%_10%,#c6e9d4_0%,transparent_70%),linear-gradient(125deg,#f4fbf6_0%,#dff3e7_100%)] shadow-[0_24px_60px_-28px_rgba(30,75,59,.35)]">
           <div>
             <p className="text-[11px] tracking-[1.65px] font-semibold text-teal mb-2.5">YOUR FIRST STEP</p>
             <h2 className="text-[26px] lg:text-[29px] font-bold tracking-[-1px] leading-[1.4]">애견미용사, 어디서부터 시작할까요?</h2>
@@ -110,7 +110,7 @@ export default async function HomePage() {
           </div>
           <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-2.5 md:justify-self-end">
             <a href="https://evaw-pet-grooming.co.kr/" target="_blank" rel="noopener noreferrer"
-              className="w-full text-center py-3 px-6 text-sm font-semibold text-teal-dark bg-white border border-[#b8cbc7] rounded-lg hover:bg-wash transition-colors whitespace-nowrap">
+              className="w-full text-center py-3 px-6 text-sm font-semibold text-teal-dark bg-white border border-[#b9d8c6] rounded-lg hover:bg-wash transition-colors whitespace-nowrap">
               무료 상담 신청
             </a>
           </div>
