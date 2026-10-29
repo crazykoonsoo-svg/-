@@ -3,7 +3,13 @@ import type { FAQItem } from "@/types/post";
 // Omitted fields must stay omitted: ordinary admin edits do not send these.
 // Use an empty string / empty array to explicitly clear a field.
 export function getPostExtraFields(body: Record<string, unknown>) {
-  const fields: { summary?: string; key_points?: string[]; faq_items?: FAQItem[] } = {};
+  const fields: { summary?: string; key_points?: string[]; faq_items?: FAQItem[]; author?: string } = {};
+  // 작성자: 보낸 경우에만 수정 (빈 값은 무시)
+  if (Object.prototype.hasOwnProperty.call(body, "author")) {
+    if (typeof body.author !== "string") throw new TypeError("author는 문자열이어야 합니다.");
+    const author = body.author.trim().slice(0, 50);
+    if (author) fields.author = author;
+  }
   if (Object.prototype.hasOwnProperty.call(body, "summary")) {
     if (typeof body.summary !== "string") throw new TypeError("summary는 문자열이어야 합니다.");
     fields.summary = body.summary;
