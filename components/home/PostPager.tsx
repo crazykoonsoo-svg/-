@@ -42,7 +42,7 @@ export default function PostPager({ children, perPage = 6 }: { children: ReactNo
               <span key={`e${i}`} className="px-1 text-muted">…</span>
             ) : (
               <button key={n} type="button" onClick={() => go(n)} aria-current={n === page ? "page" : undefined}
-                className={`${btn} ${n === page ? "bg-teal-dark border-teal-dark text-white font-semibold" : "border-line bg-white text-muted hover:bg-wash hover:border-[#a9c8c3]"}`}>
+                className={`${btn} ${n === page ? "bg-teal-dark border-teal-dark text-white font-semibold" : "border-line bg-white text-muted hover:bg-wash hover:border-[#a9d9bd]"}`}>
                 {n}
               </button>
             )
