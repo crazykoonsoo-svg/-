@@ -155,15 +155,6 @@ export default function AcademyTop({ children }: { children?: ReactNode }) {
               {/* 대표 사진은 재압축 없이 원본 그대로 (고화질) */}
               <Image className="sg-photo" src="/hero-dogs.webp" alt="초록 스카프를 맨 슈나우저와 비숑, 골든리트리버, 카발리에 킹 찰스 스패니얼" fill priority unoptimized />
             </div>
-            <a className="sg-glass sg-review" href={`${SITE}/guide/`} target="_blank" rel="noopener noreferrer" onClick={() => track("히어로_가이드_blog")}>
-              <Image className="sg-thumb" src="/slide-3.png" alt="강사와 수강생이 함께 가정견을 미용하는 수업 장면" width={192} height={192} sizes="(max-width: 600px) 48px, 64px" quality={90} />
-              <span className="sg-review-text">
-                <small>이바우펫 가이드</small>
-                <strong>애견미용 가이드</strong>
-                <span className="sg-review-sub">자격증·비용·실견·취업·창업 정보</span>
-              </span>
-              <span className="sg-review-go" aria-hidden="true">→</span>
-            </a>
           </div>
         </div>
       </section>
