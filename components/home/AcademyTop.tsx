@@ -1,6 +1,7 @@
 "use client";
 // 메인 상단: 그루밍노트식 히어로 + 이바우펫 본사이트의 과목·커리큘럼·비용 영역
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import "./academy-top.css";
 
@@ -57,44 +58,73 @@ export default function AcademyTop() {
     return () => window.removeEventListener("keydown", onKey);
   }, [phoneOpen]);
 
+  // 아래 섹션들이 화면에 들어올 때 살짝 떠오르며 나타나게 함 (움직임 줄이기 설정 시 생략)
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const targets = Array.from(document.querySelectorAll<HTMLElement>(
+      ".at-curr .at-wrap, .at-enroll .at-wrap, #recommended-posts, #recommended-posts ~ section"
+    )).filter((el) => el.getBoundingClientRect().top > window.innerHeight);
+    targets.forEach((el) => el.classList.add("sg-rv"));
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("sg-in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px" });
+    targets.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   return (
     <div className="at">
       {/* ── HERO (그루밍노트 디자인) ── */}
-      <section className="gn-hero" aria-labelledby="gn-hero-title">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="gn-hero-image" src="/hero-banner.png" width={2172} height={724} alt="밝은 공간에서 함께 있는 슈나우저, 골든리트리버, 포메라니안, 비숑" fetchPriority="high" />
-        <div className="gn-hero-veil" />
-        <div className="gn-wrap gn-hero-content">
-          <p className="gn-eyebrow"><span />애견미용학원 모든 정보</p>
-          <h1 id="gn-hero-title">전국 애견미용학원<br /><em>비용과 기간, 위치, 혜택까지</em> 찾아보세요.</h1>
-          <p className="gn-hero-desc">국비지원/교육지원/애견미용자격증/취업/창업 까지!</p>
-          <form className="gn-search" role="search" onSubmit={(e) => { e.preventDefault(); go(query); }}>
-            <label className="sr-only" htmlFor="gn-search">애견미용학원 정보 검색</label>
-            <svg className="gn-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7.2" /><path d="m16 16 5 5" /></svg>
-            <input id="gn-search" type="search" placeholder="국비지원, 기간, 비용" autoComplete="off" maxLength={100}
-              value={query} onChange={(e) => setQuery(e.target.value)} />
-            <button type="submit">검색</button>
-          </form>
-          <div className="gn-quick"><span>바로찾기</span>
-            <button type="button" onClick={() => document.getElementById("recommended-posts")?.scrollIntoView({ behavior: "smooth", block: "start" })}>추천게시물</button>
-          </div>
+      <section className="gn-hero sg-hero" aria-labelledby="gn-hero-title">
+        <div className="sg-orbit" aria-hidden="true" />
+        <div className="gn-wrap sg-grid">
+          <div className="gn-hero-content">
+            <p className="gn-eyebrow"><span />애견미용학원 모든 정보</p>
+            <h1 id="gn-hero-title">전국 애견미용학원<br /><em>비용과 기간, 위치, 혜택까지</em> 찾아보세요.</h1>
+            <p className="gn-hero-desc">국비지원/교육지원/애견미용자격증/취업/창업 까지!</p>
+            <form className="gn-search" role="search" onSubmit={(e) => { e.preventDefault(); go(query); }}>
+              <label className="sr-only" htmlFor="gn-search">애견미용학원 정보 검색</label>
+              <svg className="gn-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7.2" /><path d="m16 16 5 5" /></svg>
+              <input id="gn-search" type="search" placeholder="국비지원, 기간, 비용" autoComplete="off" maxLength={100}
+                value={query} onChange={(e) => setQuery(e.target.value)} />
+              <button type="submit">검색</button>
+            </form>
+            <div className="gn-quick"><span>바로찾기</span>
+              <button type="button" onClick={() => document.getElementById("recommended-posts")?.scrollIntoView({ behavior: "smooth", block: "start" })}>추천게시물</button>
+            </div>
 
-          {/* 추가: 상담 버튼 + 신뢰 지표 */}
-          <div className="gn-contact">
-            <button type="button" className="gn-cbtn gn-cbtn-phone" onClick={() => { track("전화상담_blog"); setPhoneOpen(true); }}>📞 전화상담</button>
-            <a href={KAKAO} target="_blank" rel="noopener noreferrer" className="gn-cbtn gn-cbtn-kakao" onClick={() => track("카톡문의_blog")}>💬 카톡문의</a>
-            <a href={NAVER} target="_blank" rel="noopener noreferrer" className="gn-cbtn gn-cbtn-naver" onClick={() => track("네이버문의_blog")}>
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z" /></svg>
-              네이버문의
+            {/* 추가: 상담 버튼 + 신뢰 지표 */}
+            <div className="gn-contact">
+              <button type="button" className="gn-cbtn gn-cbtn-phone" onClick={() => { track("전화상담_blog"); setPhoneOpen(true); }}>📞 전화상담</button>
+              <a href={KAKAO} target="_blank" rel="noopener noreferrer" className="gn-cbtn gn-cbtn-kakao" onClick={() => track("카톡문의_blog")}>💬 카톡문의</a>
+              <a href={NAVER} target="_blank" rel="noopener noreferrer" className="gn-cbtn gn-cbtn-naver" onClick={() => track("네이버문의_blog")}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727z" /></svg>
+                네이버문의
+              </a>
+            </div>
+            <div className="gn-trust" role="list">
+              <div role="listitem"><strong>전국 20개</strong><span>직영 캠퍼스 운영</span></div>
+              <div role="listitem"><strong>5,600+명</strong><span>누적 수강생</span></div>
+              <div role="listitem"><strong>100%</strong><span>가정견 실견수업</span></div>
+            </div>
+          </div>
+          <div className="sg-scene">
+            <span className="sg-word" aria-hidden="true">ALL ABOUT<br />PET GROOMING</span>
+            <div className="sg-frame">
+              <Image className="sg-photo" src="/hero-banner.png" alt="밝은 공간에서 함께 있는 슈나우저, 골든리트리버, 포메라니안, 비숑" fill priority sizes="(max-width: 900px) 92vw, 560px" />
+            </div>
+            <a className="sg-glass sg-review" href="/search?q=%ED%9B%84%EA%B8%B0" onClick={() => track("히어로_배운후기_blog")}>
+              <Image className="sg-thumb" src="/slide-3.png" alt="강사와 수강생이 함께 가정견을 미용하는 수업 장면" width={128} height={128} sizes="64px" />
+              <span className="sg-review-text">
+                <small>수강생 이야기</small>
+                <strong>애견미용 배운 후기</strong>
+                <span className="sg-review-sub">직접 배워본 사람들의 기록</span>
+              </span>
+              <span className="sg-review-go" aria-hidden="true">→</span>
             </a>
           </div>
-          <div className="gn-trust" role="list">
-            <div role="listitem"><strong>전국 20개</strong><span>직영 캠퍼스 운영</span></div>
-            <div role="listitem"><strong>5,600+명</strong><span>누적 수강생</span></div>
-            <div role="listitem"><strong>100%</strong><span>가정견 실견수업</span></div>
-          </div>
         </div>
-        <span className="gn-hero-caption">ALL ABOUT PET GROOMING / 함께 배우는 반려견 관리</span>
       </section>
 
       {/* ── 커리큘럼 ── */}
