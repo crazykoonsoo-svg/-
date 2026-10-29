@@ -15,6 +15,7 @@ const NAV = [
   { href: "/blog/category/취업·창업", label: "취업·창업" },
   { href: "/blog/category/비용", label: "비용" },
   { href: "/blog/category/국비지원", label: "국비지원" },
+  { href: "/blog/category/이바우펫", label: "이바우펫" },
   { href: "/search", label: "검색" },
 ];
 
@@ -48,7 +49,7 @@ export default function Header() {
             <Image src={LOGO_URL} alt="애견미용 관련 모든정보" width={40} height={40}
               className="w-9 h-9 sm:w-10 sm:h-10 rounded-[10px] object-cover" />
             <span className="leading-tight">
-              <span className="block text-[17px] sm:text-[19px] lg:text-[21px] font-bold tracking-[-1px] text-ink whitespace-nowrap">
+              <span className="block text-[17px] sm:text-[19px] lg:text-[19px] xl:text-[21px] font-bold tracking-[-1px] text-ink whitespace-nowrap">
                 애견미용 관련 <span className="text-coral">모든정보</span>
               </span>
               <small className="block text-[9px] sm:text-[10px] tracking-[1.6px] sm:tracking-[2px] mt-1 font-medium text-muted">ALL ABOUT PET GROOMING</small>
@@ -56,7 +57,7 @@ export default function Header() {
           </Link>
 
           {/* 데스크탑 네비게이션 */}
-          <nav className="hidden lg:flex items-center gap-6 ml-4 text-[15px] font-medium text-ink" aria-label="주요 메뉴">
+          <nav className="hidden lg:flex items-center gap-3 xl:gap-6 ml-1 xl:ml-4 text-[14px] xl:text-[15px] font-medium text-ink" aria-label="주요 메뉴">
             {NAV.map((n) => (
               <Link key={n.href} href={n.href} className="py-2 hover:text-teal transition-colors whitespace-nowrap">
                 {n.label}
