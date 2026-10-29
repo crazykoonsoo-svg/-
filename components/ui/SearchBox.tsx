@@ -22,7 +22,7 @@ export default function SearchBox({ variant = "default" }: { variant?: "default"
   return (
     <div className={variant === "hero" ? "max-w-[505px]" : "max-w-xl mx-auto"}>
       <form onSubmit={handleSubmit} role="search"
-        className="flex items-center bg-white border border-[#cfdbd8] rounded-[9px] p-1.5 shadow-[0_6px_20px_#2d454208]">
+        className="flex items-center bg-white border border-[#cfe6d8] rounded-[9px] p-1.5 shadow-[0_6px_20px_#2d454208]">
         <Search className="ml-3 shrink-0 text-muted" size={19} aria-hidden="true" />
         <input
           type="search"
