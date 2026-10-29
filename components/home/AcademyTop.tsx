@@ -113,12 +113,12 @@ export default function AcademyTop() {
             <div className="sg-frame">
               <Image className="sg-photo" src="/hero-banner.png" alt="밝은 공간에서 함께 있는 슈나우저, 골든리트리버, 포메라니안, 비숑" fill priority sizes="(max-width: 900px) 92vw, 560px" />
             </div>
-            <a className="sg-glass sg-review" href="/search?q=%ED%9B%84%EA%B8%B0" onClick={() => track("히어로_배운후기_blog")}>
+            <a className="sg-glass sg-review" href={`${SITE}/guide/`} target="_blank" rel="noopener noreferrer" onClick={() => track("히어로_가이드_blog")}>
               <Image className="sg-thumb" src="/slide-3.png" alt="강사와 수강생이 함께 가정견을 미용하는 수업 장면" width={128} height={128} sizes="64px" />
               <span className="sg-review-text">
-                <small>수강생 이야기</small>
-                <strong>애견미용 배운 후기</strong>
-                <span className="sg-review-sub">직접 배워본 사람들의 기록</span>
+                <small>이바우펫 가이드</small>
+                <strong>애견미용 가이드</strong>
+                <span className="sg-review-sub">자격증·비용·실견·취업·창업 정보</span>
               </span>
               <span className="sg-review-go" aria-hidden="true">→</span>
             </a>
