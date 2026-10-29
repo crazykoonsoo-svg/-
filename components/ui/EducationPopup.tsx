@@ -12,7 +12,7 @@ export default function EducationPopup({ variant = "sidebar" }: Props) {
 
   const buttonStyle = {
     sidebar: "w-full py-3 bg-teal-dark hover:bg-teal text-white text-sm font-bold rounded-lg transition-colors",
-    header: "text-[13px] font-semibold text-teal-dark bg-white border border-[#b8cbc7] px-3.5 py-[7px] rounded-md hover:bg-wash transition-colors whitespace-nowrap",
+    header: "text-[13px] font-semibold text-teal-dark bg-white border border-[#b9d8c6] px-3.5 py-[7px] rounded-md hover:bg-wash transition-colors whitespace-nowrap",
     mobile: "block text-sm font-medium text-gray-700 py-1",
   };
 
