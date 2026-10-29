@@ -77,7 +77,6 @@ export default function AcademyTop() {
     <div className="at">
       {/* ── HERO (그루밍노트 디자인) ── */}
       <section className="gn-hero sg-hero" aria-labelledby="gn-hero-title">
-        <div className="sg-orbit" aria-hidden="true" />
         <div className="gn-wrap sg-grid">
           <div className="gn-hero-content">
             <p className="gn-eyebrow"><span />애견미용학원 모든 정보</p>
