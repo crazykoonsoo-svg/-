@@ -37,7 +37,7 @@ const ArticleLink = Link.extend({
         parseHTML: (element: HTMLElement) => element.classList.contains("cta-btn"),
         renderHTML: (attributes: Record<string, unknown>) => attributes.ctaButton ? {
           class: "cta-btn",
-          style: "display:inline-flex;align-items:center;justify-content:center;gap:8px;max-width:100%;box-sizing:border-box;padding:15px 28px;border-radius:999px;background:#173a3e;color:#fff;text-decoration:none;font-weight:700;font-size:16px;line-height:1.4;box-shadow:0 6px 18px rgba(23,58,62,.18);",
+          style: "display:inline-flex;align-items:center;justify-content:center;gap:8px;max-width:100%;box-sizing:border-box;padding:15px 28px;border-radius:999px;background:#1e4b3b;color:#fff;text-decoration:none;font-weight:700;font-size:16px;line-height:1.4;box-shadow:0 6px 18px rgba(23,58,62,.18);",
         } : {},
       },
     };
