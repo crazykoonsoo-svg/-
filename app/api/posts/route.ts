@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
       title: body.title, slug: body.slug, excerpt: body.excerpt ?? "",
       content: body.content ?? "", category: body.category ?? "일반",
       tags: body.tags ?? [], cover_image: body.coverImage ?? "",
-      cover_image_alt: body.coverImageAlt ?? "", author: body.author ?? "관리자",
+      cover_image_alt: body.coverImageAlt ?? "", author: body.author ?? "이바우펫 애견미용학원",
       published_at: body.publishedAt ?? now, status: body.status ?? "draft",
       meta_title: body.metaTitle ?? body.title, meta_description: body.metaDescription ?? "",
       canonical_url: body.canonicalUrl ?? "", og_image: body.ogImage ?? "",
