@@ -35,13 +35,13 @@ export function getDefaultMetadata(): Metadata {
       siteName: SITE_NAME,
       title: SITE_NAME,
       description: SITE_DESCRIPTION,
-      images: [{ url: `${SITE_URL}/hero-banner.png`, alt: SITE_NAME }],
+      images: [{ url: `${SITE_URL}/og-main.jpg`, width: 1200, height: 630, alt: SITE_NAME }],
     },
     twitter: {
       card: "summary_large_image",
       title: SITE_NAME,
       description: SITE_DESCRIPTION,
-      images: [`${SITE_URL}/hero-banner.png`],
+      images: [`${SITE_URL}/og-main.jpg`],
     },
     alternates: {
       canonical: SITE_URL,
