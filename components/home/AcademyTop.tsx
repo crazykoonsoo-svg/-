@@ -19,6 +19,35 @@ const CURRICULUM = [
   { num: "+", name: "스페셜 특강", sub: "행동교정 · 펫푸드 · 아로마", tag: "특강", tone: "purple" },
 ];
 
+// 커리큘럼 카드를 눌렀을 때 뜨는 과정 상세 (evaw-pet-grooming.co.kr 과정 팝업과 같은 내용)
+type CourseDetail = { icon: string; title: string; sub: string; target: string[]; learn: string; period: string; support?: boolean };
+const COURSE_DETAIL: Record<string, CourseDetail> = {
+  "기초과정": { icon: "📚", title: "기초과정 (적성파악)", sub: "입문 ~ 기본 그루밍",
+    target: ["애견미용을 처음 시작하는 사람", "애견미용이 적성에 맞는지 확인이 필요한 사람"],
+    learn: "기초 애견미용 이론과 도구 사용법, 가위질부터 기본 그루밍까지 단계별로 배웁니다. 개별 피드백으로 연습을 보완합니다.",
+    period: "~1개월 (월 수강)" },
+  "자격증 취득반": { icon: "🏅", title: "자격증 취득반", sub: "애견미용자격증 3급 · 2급",
+    target: ["자격증으로 취업·창업을 준비하는 분", "자기계발이나 스펙업으로 자격증을 취득하는 분"],
+    learn: "애견미용자격증 3급·2급 준비를 위한 급수별 시험 대비와 반복 실습을 진행합니다.",
+    period: "급수별 자격증 준비기간 안내 · 개인 진도에 따라 상이", support: true },
+  "실견 심화반": { icon: "🐶", title: "실견 심화반", sub: "가정견 실습 집중과정",
+    target: ["학원 상주견·농장견이 아닌 다채로운 견종으로 포트폴리오 제작을 원하는 분", "실무 감각을 빠르게 높이고 싶은 분"],
+    learn: "100% 가정견을 대상으로 다양한 견종의 미용 실습을 진행합니다. 견종별 작업과 개별 피드백을 통해 실무 경험을 쌓습니다.",
+    period: "~1개월 (월 수강)" },
+  "취업·창업반": { icon: "💼", title: "취업·창업반", sub: "실무 완성 + 취업 연계 + 창업 컨설팅",
+    target: ["취업·창업을 목표로 하는 분", "실무 완성도를 높이고 싶은 분", "취업과 창업에 실질적 도움이 필요한 분"],
+    learn: "취업·창업을 위한 실무교육과 취업처 연계, 창업 컨설팅을 안내합니다. 목표에 맞는 지원 범위와 이용 조건은 상담에서 확인하세요.",
+    period: "최대 36개월 (개인별 상이)" },
+  "종합·심화반": { icon: "🔥", title: "종합·심화반", sub: "교육지원으로 합리적인 선택",
+    target: ["전문가 수준까지 목표하는 분", "교육지원 혜택을 활용하고 싶은 분"],
+    learn: "기초교육부터 자격증 준비, 가정견 실습, 취업·창업 준비까지 연결하는 과정입니다.",
+    period: "수강생 출결에 따라 상이함", support: true },
+  "스페셜 특강": { icon: "✨", title: "스페셜 특강", sub: "행동교정 · 펫푸드 · 아로마 · 장례지도",
+    target: ["전문성을 더하고 싶은 분", "다양한 자격증을 원스톱으로 준비하는 분"],
+    learn: "반려동물행동교정사, 펫푸드스타일리스트, 아로마테라피 자격증, 장례지도사 관련 특강입니다. 희망 과목의 개설 일정을 확인하세요.",
+    period: "과목별 상이" },
+};
+
 const ENROLL = [
   { title: "수강료·도구", icon: <><ellipse cx="12" cy="6" rx="8" ry="3" /><path d="M4 6v6c0 4 16 4 16 0V6M4 12v6c0 4 16 4 16 0v-6" /></>, body: <>동일 과정 기준 수강료와 도구 제공 조건은 전 지점 공통입니다. 선택 과정의 포함 항목과 별도 비용을 함께 확인하세요.</> },
   { title: "수업·상담 시간", icon: <><circle cx="12" cy="12" r="9" /><path d="M12 6v6l4 2" /></>, body: <>월~금 <strong>11:00~21:30</strong><br />토요일 <strong>11:00~15:00</strong></> },
@@ -38,6 +67,7 @@ export default function AcademyTop() {
   const [query, setQuery] = useState("");
   const go = (q: string) => { if (q.trim()) router.push(`/search?q=${encodeURIComponent(q.trim())}`); };
   const [phoneOpen, setPhoneOpen] = useState(false);
+  const [course, setCourse] = useState<string | null>(null);
   const [start, setStart] = useState(0);
   const [perView, setPerView] = useState(3);
 
@@ -57,6 +87,16 @@ export default function AcademyTop() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [phoneOpen]);
+
+  // 과정 팝업: ESC로 닫기 + 뒤 화면 스크롤 잠금
+  useEffect(() => {
+    if (!course) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setCourse(null);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = prev; };
+  }, [course]);
 
   // 아래 섹션들이 화면에 들어올 때 살짝 떠오르며 나타나게 함 (움직임 줄이기 설정 시 생략)
   useEffect(() => {
@@ -137,7 +177,7 @@ export default function AcademyTop() {
           </div>
           <div className="at-curr-grid">
             {CURRICULUM.map((c) => (
-              <a key={c.name} href={`${SITE}/curriculum/`} target="_blank" rel="noopener noreferrer" className={`at-curr-card${c.tone === "hit" ? " hit" : ""}`}>
+              <button key={c.name} type="button" aria-haspopup="dialog" onClick={() => { track(`과정팝업_${c.name}_blog`); setCourse(c.name); }} className={`at-curr-card${c.tone === "hit" ? " hit" : ""}`}>
                 <span className="at-curr-left">
                   <span className={`at-curr-num${c.tone === "hit" ? " hit" : ""}`}>{c.num}</span>
                   <span>
@@ -146,7 +186,7 @@ export default function AcademyTop() {
                   </span>
                 </span>
                 <span className={`at-tag at-tag-${c.tone}`}>{c.tag}</span>
-              </a>
+              </button>
             ))}
           </div>
           <a href={`${SITE}/curriculum/`} target="_blank" rel="noopener noreferrer" className="at-btn at-btn-primary at-btn-wide" onClick={() => track("커리큘럼_blog")}>
@@ -191,6 +231,40 @@ export default function AcademyTop() {
       </section>
 
       {/* ── 전화상담 팝업 ── */}
+      {course && COURSE_DETAIL[course] && (() => {
+        const d = COURSE_DETAIL[course];
+        return (
+          <div className="sg-cm-bg" onClick={() => setCourse(null)}>
+            <div className="sg-cm" role="dialog" aria-modal="true" aria-labelledby="sg-cm-title" onClick={(e) => e.stopPropagation()}>
+              <div className="sg-cm-head">
+                <button type="button" className="sg-cm-x" onClick={() => setCourse(null)} aria-label="닫기" autoFocus>✕</button>
+                <span className="sg-cm-icon" aria-hidden="true">{d.icon}</span>
+                <h3 id="sg-cm-title">{d.title}</h3>
+                <p>{d.sub}</p>
+              </div>
+              <div className="sg-cm-body">
+                <div className="sg-cm-row"><span className="sg-cm-label">추천 대상</span>
+                  <ul>{d.target.map((t) => <li key={t}>{t}</li>)}</ul></div>
+                <div className="sg-cm-row"><span className="sg-cm-label">배우는 내용</span><p>{d.learn}</p></div>
+                <div className="sg-cm-row"><span className="sg-cm-label">일정·기간</span>
+                  <p>수업·상담: 월~금 11:00~21:30 / 토요일 11:00~15:00<br />기간 안내: {d.period}<br /><small>참여 일정과 교육기간은 선택 과정·출석 빈도·개인 진도에 맞춰 상담합니다.</small></p></div>
+                <div className="sg-cm-row"><span className="sg-cm-label">비용</span>
+                  <p>동일 과정 기준 수강료와 도구 제공 조건은 전 지점 공통입니다. 과정별 포함 항목과 도구·재료·시험 관련 별도 비용 여부를 상담에서 안내받으세요.
+                    {d.support && <><br /><small>사단법인 한국유기견구호연맹의 전문가 양성 목적 교육지원은 적용 여부와 혜택이 심사 후 확정됩니다.</small></>}</p></div>
+              </div>
+              <div className="sg-cm-foot">
+                <a href={KAKAO} target="_blank" rel="noopener noreferrer" className="sg-cm-cta" onClick={() => track(`과정팝업_카톡상담_${course}_blog`)}>{course} 일정·비용 상담 신청</a>
+                <div className="sg-cm-sub">
+                  <button type="button" onClick={() => { track(`과정팝업_전화_${course}_blog`); setCourse(null); setPhoneOpen(true); }}>📞 전화상담</button>
+                  <a href={NAVER} target="_blank" rel="noopener noreferrer" onClick={() => track(`과정팝업_네이버_${course}_blog`)}>네이버문의</a>
+                  <a href={`${SITE}/curriculum/`} target="_blank" rel="noopener noreferrer">커리큘럼 자세히</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {phoneOpen && (
         <div className="at-phone-bg" onClick={() => setPhoneOpen(false)} role="dialog" aria-modal="true" aria-label="전화 상담">
           <div className="at-phone" onClick={(e) => e.stopPropagation()}>
