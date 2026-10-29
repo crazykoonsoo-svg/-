@@ -19,45 +19,45 @@ export default async function HomePage() {
 
   return (
     <div className="text-ink break-keep">
-      {/* ── 상단: 이바우펫 본사이트와 같은 구성 ── */}
-      <AcademyTop />
-
-      {/* ── 글 목록 ── */}
-      <section id="recommended-posts" className={`${WRAP} py-[72px] scroll-mt-24`}>
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-7">
-          <div>
-            <p className="text-[11px] tracking-[1.65px] font-semibold text-teal mb-2.5">THE PET GROOMING LIBRARY</p>
-            <h2 className="text-[23px] sm:text-[26px] lg:text-[29px] font-bold tracking-[-1px] leading-[1.4]">궁금한 주제부터, 가볍게 읽어보세요.</h2>
+      {/* ── 상단: 첫 화면 → 글 목록 → 커리큘럼 → 비용과 일정 ── */}
+      <AcademyTop>
+        {/* ── 글 목록 ── */}
+        <section id="recommended-posts" className={`${WRAP} py-[72px] scroll-mt-24`}>
+          <div className="flex flex-wrap items-end justify-between gap-6 mb-7">
+            <div>
+              <p className="text-[11px] tracking-[1.65px] font-semibold text-teal mb-2.5">THE PET GROOMING LIBRARY</p>
+              <h2 className="text-[23px] sm:text-[26px] lg:text-[29px] font-bold tracking-[-1px] leading-[1.4]">궁금한 주제부터, 가볍게 읽어보세요.</h2>
+            </div>
+            <p className="text-[13px] text-muted leading-[1.6] md:text-right">
+              예비 애견미용사와 보호자를 위한<br className="hidden md:block" /> 주제별 정보 모음
+            </p>
           </div>
-          <p className="text-[13px] text-muted leading-[1.6] md:text-right">
-            예비 애견미용사와 보호자를 위한<br className="hidden md:block" /> 주제별 정보 모음
-          </p>
-        </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <div className="flex gap-2 flex-wrap">
-            <Link href="/" className="px-[17px] py-[7px] rounded-full text-sm bg-teal-dark border border-teal-dark text-white">전체</Link>
-            {categories.map((cat) => (
-              <Link key={cat.slug} href={`/blog/category/${cat.slug}`}
-                className="px-[17px] py-[7px] rounded-full text-sm bg-white border border-line text-muted hover:bg-wash hover:border-[#a9d9bd] transition-colors whitespace-nowrap">
-                {cat.name}
-              </Link>
-            ))}
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div className="flex gap-2 flex-wrap">
+              <Link href="/" className="px-[17px] py-[7px] rounded-full text-sm bg-teal-dark border border-teal-dark text-white">전체</Link>
+              {categories.map((cat) => (
+                <Link key={cat.slug} href={`/blog/category/${cat.slug}`}
+                  className="px-[17px] py-[7px] rounded-full text-sm bg-white border border-line text-muted hover:bg-wash hover:border-[#a9d9bd] transition-colors whitespace-nowrap">
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+            <span className="text-xs text-muted whitespace-nowrap">총 {posts.length}개의 글</span>
           </div>
-          <span className="text-xs text-muted whitespace-nowrap">총 {posts.length}개의 글</span>
-        </div>
 
-        {posts.length > 0 ? (
-          <PostPager perPage={6}>
-            {posts.map((post) => <PostCard key={post.slug} post={post} />)}
-          </PostPager>
-        ) : posts.length === 0 ? (
-          <div className="text-center py-14 px-6 border border-dashed border-[#c8dccf] rounded-[10px]">
-            <h3 className="text-[21px] font-bold">아직 등록된 글이 없습니다.</h3>
-            <p className="text-muted mt-3">곧 새로운 정보로 찾아올게요.</p>
-          </div>
-        ) : null}
-      </section>
+          {posts.length > 0 ? (
+            <PostPager perPage={6}>
+              {posts.map((post) => <PostCard key={post.slug} post={post} />)}
+            </PostPager>
+          ) : posts.length === 0 ? (
+            <div className="text-center py-14 px-6 border border-dashed border-[#c8dccf] rounded-[10px]">
+              <h3 className="text-[21px] font-bold">아직 등록된 글이 없습니다.</h3>
+              <p className="text-muted mt-3">곧 새로운 정보로 찾아올게요.</p>
+            </div>
+          ) : null}
+        </section>
+      </AcademyTop>
 
       {/* ── 많이 읽은 글 · 태그 ── */}
       {(popularPosts.length > 0 || tags.length > 0) && (
