@@ -4,14 +4,14 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #176968;
-  --color-primary-dark: #173a3e;
+  --color-primary: #2f7d5c;
+  --color-primary-dark: #1e4b3b;
   --color-accent: #ae583e;
-  --color-text: #203638;
-  --color-text-muted: #617173;
-  --color-border: #e0e8e7;
+  --color-text: #1f3a30;
+  --color-text-muted: #5d7268;
+  --color-border: #dfece4;
   --color-bg: #ffffff;
-  --color-bg-secondary: #f3f7f7;
+  --color-bg-secondary: #f2faf5;
   --font-noto: "Noto Sans KR", sans-serif;
 }
 
@@ -278,8 +278,8 @@
 
 /* 본문 CTA 버튼: <p class="cta-wrap"><a class="cta-btn" href="...">문구</a></p> */
 .blog-content .cta-wrap { text-align: center; margin: 28px 0; }
-.blog-content a.cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 260px; max-width: 100%; padding: 15px 28px; border-radius: 999px; background: #173a3e; color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; line-height: 1.4; box-shadow: 0 6px 18px rgba(23,58,62,.18); transition: background-color .2s ease, transform .2s ease; }
-.blog-content a.cta-btn:hover { background: #176968 !important; color: #fff; transform: translateY(-1px); }
+.blog-content a.cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 260px; max-width: 100%; padding: 15px 28px; border-radius: 999px; background: #1e4b3b; color: #fff; text-decoration: none; font-weight: 700; font-size: 16px; line-height: 1.4; box-shadow: 0 6px 18px rgba(23,58,62,.18); transition: background-color .2s ease, transform .2s ease; }
+.blog-content a.cta-btn:hover { background: #2f7d5c !important; color: #fff; transform: translateY(-1px); }
 .blog-content a.cta-btn::after { display: none; }
 
 /* Rich-text emphasis inside CTA buttons must retain readable button text. */
