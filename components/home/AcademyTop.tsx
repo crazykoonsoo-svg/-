@@ -77,6 +77,7 @@ export default function AcademyTop() {
     <div className="at">
       {/* ── HERO (그루밍노트 디자인) ── */}
       <section className="gn-hero sg-hero" aria-labelledby="gn-hero-title">
+        <p className="sg-word" aria-hidden="true">ALL ABOUT PET GROOMING</p>
         <div className="gn-wrap sg-grid">
           <div className="gn-hero-content">
             <p className="gn-eyebrow"><span />애견미용학원 모든 정보</p>
@@ -109,7 +110,6 @@ export default function AcademyTop() {
             </div>
           </div>
           <div className="sg-scene">
-            <span className="sg-word" aria-hidden="true">ALL ABOUT<br />PET GROOMING</span>
             <div className="sg-frame">
               <Image className="sg-photo" src="/hero-dogs.webp" alt="초록 스카프를 맨 슈나우저와 비숑, 골든리트리버, 카발리에 킹 찰스 스패니얼" fill priority sizes="(max-width: 900px) 92vw, 560px" />
             </div>
