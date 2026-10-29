@@ -11,8 +11,8 @@ import TableOfContents from "@/components/blog/TableOfContents";
 import RelatedPosts from "@/components/blog/RelatedPosts";
 import PostNavigation from "@/components/blog/PostNavigation";
 import ShareButtons from "@/components/blog/ShareButtons";
-import { SITE_URL } from "@/lib/seo";
-import { Clock, Calendar, Folder, Tag } from "lucide-react";
+import { SITE_URL, AUTHOR_NAME } from "@/lib/seo";
+import { Clock, Calendar, Folder, Tag, PenLine } from "lucide-react";
 import ScrollProgress from "@/components/blog/ScrollProgress";
 import GiscusComments from "@/components/blog/GiscusComments";
 
@@ -52,6 +52,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   const relatedPosts = await getRelatedPosts(post);
   const { prev, next } = await getAdjacentPosts(params.slug);
+
+  // 작성자 표시: 예전 기본값 "관리자"는 학원 이름으로 보여줌
+  const authorName = post.author && post.author !== "관리자" ? post.author : AUTHOR_NAME;
+  const updatedLabel = post.updatedAt && formatDate(post.updatedAt) !== formatDate(post.publishedAt) ? formatDate(post.updatedAt) : "";
 
   const readingTime = post.readingTime ?? Math.ceil((post.content || "").replace(/<[^>]+>/g, "").split(/\s+/).length / 300);
   const articleSchema = getArticleSchema(post);
@@ -95,9 +99,11 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               <h1 className="text-[26px] sm:text-[32px] lg:text-[38px] font-bold text-ink leading-[1.38] tracking-[-1.5px] mb-4">{post.title}</h1>
               {post.excerpt && <p className="text-[17px] text-muted leading-[1.7] mb-5">{post.excerpt}</p>}
               <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 border-t border-b border-gray-100 py-3">
+                <span className="flex items-center gap-1.5"><PenLine size={14} />작성 {authorName}</span>
                 <time dateTime={post.publishedAt} className="flex items-center gap-1.5">
                   <Calendar size={14} />{formatDate(post.publishedAt)}
                 </time>
+                {updatedLabel && <time dateTime={post.updatedAt} className="flex items-center gap-1.5">수정 {updatedLabel}</time>}
                 <span className="flex items-center gap-1.5"><Clock size={14} />약 {readingTime}분 읽기</span>
                 {post.tags.length > 0 && (
                   <div className="flex items-center gap-1.5 flex-wrap">
