@@ -40,7 +40,7 @@ export default function Header() {
   const isHome = usePathname() === "/";
 
   return (
-    <header className="sticky top-0 z-50 bg-white/[.97] border-b border-line backdrop-blur">
+    <header className="sticky top-0 z-50 bg-[#fbfdf8]/[.86] border-b border-line/80 backdrop-blur-xl">
       <div className="max-w-[1160px] mx-auto px-5 lg:px-6">
         <div className="flex items-center gap-3 sm:gap-6 min-h-[64px] sm:min-h-[72px] lg:min-h-[84px]">
           {/* 로고 */}
@@ -70,7 +70,7 @@ export default function Header() {
               {isHome ? <ContactButtons /> : <EducationPopup variant="header" />}
             </div>
             <a href="https://evaw-pet-grooming.co.kr/" target="_blank" rel="noopener noreferrer"
-              className="hidden sm:inline-block text-[13px] font-semibold text-white bg-teal-dark hover:bg-teal px-3.5 py-2 rounded-md transition-colors whitespace-nowrap">
+              className="hidden sm:inline-block text-[13px] font-bold text-white bg-[linear-gradient(125deg,#3f9a6f,#24664a)] hover:brightness-110 px-4 py-2.5 rounded-full shadow-[0_8px_20px_rgba(47,125,92,.22)] transition whitespace-nowrap">
               상담문의
             </a>
             <button className="lg:hidden p-2 ml-1 text-ink"
