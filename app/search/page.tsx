@@ -43,7 +43,7 @@ function SearchContent() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") handleSearch(query); }}
             placeholder="검색어를 입력하세요"
-            className="w-full pl-10 pr-4 py-3 text-sm border border-[#cfdbd8] rounded-[9px] focus:ring-2 focus:ring-teal-200 focus:border-teal"
+            className="w-full pl-10 pr-4 py-3 text-sm border border-[#cfe6d8] rounded-[9px] focus:ring-2 focus:ring-teal-200 focus:border-teal"
             autoFocus
           />
         </div>
