@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: "/hero-banner.png",
+        url: "/og-main.jpg",
         width: 1200,
-        height: 600,
+        height: 630,
         alt: "애견미용 관련 모든정보 - 자격증·국비지원·학원 정보",
       },
     ],
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "애견미용 자격증·국비지원·학원 정보 | 애견미용 관련 모든정보",
     description: SITE_DESCRIPTION,
-    images: ["/hero-banner.png"],
+    images: ["/og-main.jpg"],
   },
   alternates: {
     canonical: "https://www.evaw-pet-grooming.com",
