@@ -385,7 +385,8 @@
   background: linear-gradient(135deg, #cdeedb, #a9dcbf); transform: rotate(5deg) translate(14px, 8px); }
 .sg-frame::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: var(--sg-r);
   background: linear-gradient(160deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,0) 36%); }
-.sg-photo { object-fit: cover; object-position: 76% 55%; border-radius: var(--sg-r); border: 8px solid #fff; box-sizing: border-box;
+.sg-photo { object-fit: cover; object-position: 50% 45%; border-radius: var(--sg-r); border: 8px solid #fff; box-sizing: border-box;
+  background: radial-gradient(120% 90% at 50% 20%, #f4fbf6 0%, #dcf1e4 60%, #c6e9d4 100%);
   box-shadow: 0 30px 60px -20px rgba(30,75,59,.35), 0 0 0 1px rgba(95,184,138,.18); }
 @keyframes sg-float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-14px) rotate(1deg); } }
 
@@ -399,7 +400,7 @@
 .sg-glass strong { display: block; font-size: 14.5px; line-height: 1.45; font-weight: 700; letter-spacing: -0.03em; }
 
 /* 후기 카드 (하나만, 사진 왼쪽 아래에 걸쳐 떠 있음) — 사진 썸네일형 */
-.sg-review { left: -22px; bottom: 26px; max-width: 330px; padding: 12px 14px 12px 12px; gap: 13px; border-radius: 20px;
+.sg-review { left: -22px; bottom: 26px; max-width: 360px; padding: 12px 14px 12px 12px; gap: 13px; border-radius: 20px;
   animation: sg-review-float 7s ease-in-out infinite .4s; }
 .sg-thumb { width: 64px; height: 64px; flex: none; border-radius: 16px; object-fit: cover; object-position: 80% 40%; box-shadow: 0 4px 12px rgba(30,75,59,.12); }
 .sg-review-text { display: block; min-width: 0; }
