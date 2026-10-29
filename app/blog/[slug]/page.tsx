@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { getAllPosts, getPostBySlug, getRelatedPosts, getAdjacentPosts } from "@/lib/posts";
 import { getPostMetadata } from "@/lib/seo";
+import { lazyContentImages, splitBeforeHeading } from "@/lib/content";
 import { getArticleSchema, getBreadcrumbSchema, getFAQSchema, serializeSchema } from "@/lib/schema";
 import TableOfContents from "@/components/blog/TableOfContents";
 import RelatedPosts from "@/components/blog/RelatedPosts";
@@ -60,6 +61,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     { name: post.title, url: `${SITE_URL}/blog/${post.slug}` },
   ]);
   const faqSchema = post.faqItems && post.faqItems.length > 0 ? getFAQSchema(post.faqItems) : null;
+
+  // 본문 이미지 지연 로딩 + 세 번째 소제목 앞에 "함께 읽으면 좋은 글" 넣기
+  const [contentTop, contentRest] = splitBeforeHeading(lazyContentImages(post.content || ""), 3);
+  const inlineRelated = contentRest ? relatedPosts.slice(0, 3) : [];
 
   return (
     <>
@@ -127,7 +132,20 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             )}
 
-            <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+            <div className="blog-content" dangerouslySetInnerHTML={{ __html: contentTop }} />
+            {inlineRelated.length > 0 && (
+              <aside className="my-8 rounded-[18px] border border-[#cfe6d8] bg-[linear-gradient(135deg,#f4fbf6,#e6f5ec)] px-5 py-4" aria-label="함께 읽으면 좋은 글">
+                <p className="text-[12px] font-bold tracking-[.02em] text-teal mb-2">함께 읽으면 좋은 글</p>
+                <ul className="space-y-1.5">
+                  {inlineRelated.map((r) => (
+                    <li key={r.slug}>
+                      <a href={`/blog/${r.slug}`} className="text-[15px] font-semibold leading-[1.5] text-ink hover:text-teal transition-colors">→ {r.title}</a>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            )}
+            {contentRest && <div className="blog-content" dangerouslySetInnerHTML={{ __html: contentRest }} />}
 
             {post.faqItems && post.faqItems.length > 0 && (
               <section className="mt-12" aria-label="자주 묻는 질문">
