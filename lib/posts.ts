@@ -36,7 +36,7 @@ function toPost(row: any): Post {
     excerpt: row.excerpt ?? "", content: row.content ?? "",
     category: row.category ?? "일반", tags: row.tags ?? [],
     coverImage: row.cover_image ?? "", coverImageAlt: row.cover_image_alt ?? "",
-    author: row.author ?? "관리자", publishedAt: row.published_at,
+    author: row.author ?? "이바우펫 애견미용학원", publishedAt: row.published_at,
     updatedAt: row.updated_at, status: row.status,
     metaTitle: row.meta_title ?? "", metaDescription: row.meta_description ?? "",
     canonicalUrl: row.canonical_url ?? "", ogImage: row.og_image ?? "",
