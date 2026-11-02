@@ -51,7 +51,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     <p className="text-sm text-gray-500">/blog/{post.slug}</p>
     <label className="block"><span className="block font-semibold mb-2">카테고리</span>
       <select className="w-full border rounded-lg p-3" value={post.category || ""} onChange={e => change("category", e.target.value)}>
-        {Array.from(new Set([post.category, "교육", "자격증", "국비지원", "비용", "취업·창업", "애견미용학원", "이바우펫"].filter(Boolean))).map(category => <option key={category} value={category}>{category}</option>)}
+        {Array.from(new Set([post.category, "교육", "자격증", "국비지원", "비용", "취업·창업", "애견미용학원", "이바우펫", "견종"].filter(Boolean))).map(category => <option key={category} value={category}>{category}</option>)}
       </select>
     </label>
     {fields.map(([key, label]) => <label key={key} className="block">
