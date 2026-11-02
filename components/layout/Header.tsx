@@ -16,6 +16,7 @@ const NAV = [
   { href: "/blog/category/비용", label: "비용" },
   { href: "/blog/category/국비지원", label: "국비지원" },
   { href: "/blog/category/이바우펫", label: "이바우펫" },
+  { href: "/blog/category/견종", label: "견종" },
   { href: "/search", label: "검색" },
 ];
 
@@ -57,7 +58,7 @@ export default function Header() {
           </Link>
 
           {/* 데스크탑 네비게이션 */}
-          <nav className="hidden lg:flex items-center gap-3 xl:gap-6 ml-1 xl:ml-4 text-[14px] xl:text-[15px] font-medium text-ink" aria-label="주요 메뉴">
+          <nav className="hidden lg:flex items-center gap-2 xl:gap-3 ml-1 xl:ml-2 text-[14px] xl:text-[15px] font-medium text-ink" aria-label="주요 메뉴">
             {NAV.map((n) => (
               <Link key={n.href} href={n.href} className="py-2 hover:text-teal transition-colors whitespace-nowrap">
                 {n.label}
