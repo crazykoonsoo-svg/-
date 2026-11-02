@@ -301,3 +301,22 @@
 @media (hover: none) {
   .blog-content img:hover, .blog-content a:hover img { transform: none; filter: none; }
 }
+
+/* Keep article content usable on narrow screens, including older inline CTA styles. */
+.blog-content h2, .blog-content h3 { scroll-margin-top: 6rem; }
+.blog-content a:not(.cta-btn):not(:has(img)) {
+  display: inline;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .blog-content { min-width: 0; overflow-wrap: anywhere; }
+  .blog-content a.cta-btn {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    padding: 14px 18px !important;
+    min-height: 48px;
+  }
+  .blog-content th, .blog-content td { padding: 10px 8px; }
+  .faq-question > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+  .faq-question > span:last-child { flex-shrink: 0; }
+}
