@@ -18,10 +18,8 @@ export default function TableOfContents({ content }: Props) {
 
   // 실제 렌더링된 DOM의 h2, h3에 id 부여 + 목차 생성
   useEffect(() => {
-    const blogContent = document.querySelector(".blog-content");
-    if (!blogContent) return;
-
-    const elements = blogContent.querySelectorAll("h2, h3");
+    // Related links split the article into multiple content containers.
+    const elements = document.querySelectorAll(".blog-content h2, .blog-content h3");
     const items: TOCItem[] = [];
 
     elements.forEach((el, idx) => {

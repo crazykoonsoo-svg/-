@@ -19,7 +19,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       }).catch(e => { if (active) setError(e.message); });
     return () => { active = false; };
   }, [params.id]);
-  const change = (key: string, value: string) => setPost((p: any) => ({ ...p, [key]: value }));
+  const change = (key: string, value: unknown) => setPost((p: any) => ({ ...p, [key]: value }));
   const save = async () => {
     if (!post.title.trim() || !post.content.trim()) { setError("제목과 본문을 입력해 주세요."); return; }
     setSaving(true); setError("");
@@ -30,7 +30,10 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
           title: post.title, slug: post.slug, excerpt: post.excerpt,
           content: post.content, category: post.category, tags: post.tags,
           coverImage: post.cover_image, coverImageAlt: post.cover_image_alt,
-          status: post.status, metaTitle: post.meta_title, metaDescription: post.meta_description
+          status: post.status, metaTitle: post.meta_title, metaDescription: post.meta_description,
+          summary: post.summary || "",
+          keyPoints: (post.key_points || []).filter((point: string) => point.trim()),
+          faqItems: post.faq_items || []
         })
       });
       if (!res.ok) throw new Error("저장하지 못했습니다. 입력 내용을 유지했습니다.");
@@ -58,6 +61,25 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     <label className="block"><span className="block font-semibold mb-2">본문 HTML</span>
       <textarea className="w-full border rounded-lg p-3 font-mono text-sm" rows={24} value={post.content || ""} onChange={e => change("content", e.target.value)} />
     </label>
+    <label className="block"><span className="block font-semibold mb-2">핵심 요약</span>
+      <textarea className="w-full border rounded-lg p-3" rows={3} value={post.summary || ""} onChange={e => change("summary", e.target.value)} />
+    </label>
+    <label className="block"><span className="block font-semibold mb-2">핵심 포인트 (한 줄에 하나)</span>
+      <textarea className="w-full border rounded-lg p-3" rows={5} value={(post.key_points || []).join("\n")} onChange={e => change("key_points", e.target.value.split("\n"))} />
+    </label>
+    <fieldset className="space-y-4">
+      <legend className="font-semibold">자주 묻는 질문</legend>
+      {(post.faq_items || []).map((faq: { question: string; answer: string }, index: number) => <div key={index} className="border rounded-lg p-4 space-y-3">
+        <label className="block">질문 {index + 1}
+          <input className="w-full border rounded-lg p-3" value={faq.question} onChange={e => change("faq_items", post.faq_items.map((item: typeof faq, i: number) => i === index ? { ...item, question: e.target.value } : item))} />
+        </label>
+        <label className="block">답변 {index + 1}
+          <textarea className="w-full border rounded-lg p-3" rows={3} value={faq.answer} onChange={e => change("faq_items", post.faq_items.map((item: typeof faq, i: number) => i === index ? { ...item, answer: e.target.value } : item))} />
+        </label>
+        <button type="button" className="text-red-700 underline" onClick={() => change("faq_items", post.faq_items.filter((_: unknown, i: number) => i !== index))}>질문 {index + 1} 삭제</button>
+      </div>)}
+      <button type="button" className="border rounded-lg px-4 py-2" onClick={() => change("faq_items", [...(post.faq_items || []), { question: "", answer: "" }])}>질문 추가</button>
+    </fieldset>
     <details><summary className="cursor-pointer font-semibold">본문 미리보기</summary>
       <div className="blog-content border rounded-lg p-6 mt-4" dangerouslySetInnerHTML={{ __html: post.content }} />
     </details>
