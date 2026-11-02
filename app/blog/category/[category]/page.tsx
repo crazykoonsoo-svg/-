@@ -39,6 +39,7 @@ export default async function CategoryPage({ params }: { params: { category: str
             <span className="block w-4 h-px bg-teal" />CATEGORY
           </p>
           <h1 className="text-[30px] lg:text-[38px] font-bold tracking-[-1.5px] leading-[1.35] text-ink">{category}</h1>
+          {category === "견종" && <p className="text-muted mt-3 leading-relaxed">견종별 관리와 미용, 털빠짐, 성격과 특징, 산책, 입양 전 준비와 비용을 살펴보세요.</p>}
           <p className="text-muted mt-2 text-[15px]">총 {posts.length}개의 글</p>
         </div>
       </header>
@@ -48,7 +49,7 @@ export default async function CategoryPage({ params }: { params: { category: str
             {posts.map((post) => <PostCard key={post.slug} post={post} />)}
           </div>
         ) : (
-          <p className="text-center text-gray-400 py-16">이 카테고리에 글이 없습니다.</p>
+          <p className="text-center text-gray-400 py-16">{category === "견종" ? "견종별 관리와 미용 가이드를 준비하고 있습니다." : "이 카테고리에 글이 없습니다."}</p>
         )}
       </div>
     </>
