@@ -17,7 +17,6 @@ const NAV = [
   { href: "/blog/category/국비지원", label: "국비지원" },
   { href: "/blog/category/이바우펫", label: "이바우펫" },
   { href: "/blog/category/견종", label: "견종" },
-  { href: "/search", label: "검색" },
 ];
 
 function ContactButtons() {
