@@ -4,6 +4,8 @@
 const nextConfig = {
   // 이미지 최적화 설정
   images: {
+    // Serve public originals while the hosted image optimizer returns 402.
+    unoptimized: true,
     formats: ["image/avif", "image/webp"],
     // 외부 이미지 도메인 허용 (필요 시 추가)
     remotePatterns: [
