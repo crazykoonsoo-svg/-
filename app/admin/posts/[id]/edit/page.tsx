@@ -54,6 +54,12 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         {Array.from(new Set([post.category, "교육", "자격증", "국비지원", "비용", "취업·창업", "애견미용학원", "이바우펫", "견종"].filter(Boolean))).map(category => <option key={category} value={category}>{category}</option>)}
       </select>
     </label>
+    <label className="block"><span className="block font-semibold mb-2">발행 상태</span>
+      <select className="w-full border rounded-lg p-3" value={post.status || "draft"} onChange={e => change("status", e.target.value)}>
+        <option value="draft">임시저장</option>
+        <option value="published">발행</option>
+      </select>
+    </label>
     {fields.map(([key, label]) => <label key={key} className="block">
       <span className="block font-semibold mb-2">{label}</span>
       <input className="w-full border rounded-lg p-3" value={post[key] || ""} onChange={e => change(key, e.target.value)} />
