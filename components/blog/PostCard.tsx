@@ -81,9 +81,9 @@ export default function PostCard({ post, variant = "default" }: PostCardProps) {
 
   return (
     <article className="group bg-white rounded-[11px] border border-line overflow-hidden flex flex-col break-keep transition-all duration-200 hover:-translate-y-[3px] hover:border-[#96b9b3] hover:shadow-[0_10px_22px_#1b42430a]">
-      <Link href={`/blog/${post.slug}`} className="block overflow-hidden bg-wash" tabIndex={-1} aria-hidden="true">
+      <Link href={`/blog/${post.slug}`} className="block overflow-hidden bg-wash" tabIndex={-1}>
         {post.coverImage ? (
-          <Image src={post.coverImage} alt="" width={600} height={340}
+          <Image src={post.coverImage} alt={post.coverImageAlt?.trim() || post.title} width={600} height={340}
             className="w-full aspect-[16/9] object-cover group-hover:scale-[1.03] transition-transform duration-300" loading="lazy" />
         ) : (
           <div className="w-full aspect-[16/9] bg-sand" />
