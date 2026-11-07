@@ -43,7 +43,8 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
   if (!post) return <div className="max-w-4xl mx-auto p-8">{error || "글을 불러오는 중입니다."}</div>;
   const fields = [
     ["title", "제목"], ["excerpt", "글 요약"], ["meta_title", "메타 제목"],
-    ["meta_description", "메타 설명"]
+    ["meta_description", "메타 설명"],
+    ["cover_image", "대표 이미지 URL"], ["cover_image_alt", "대표 이미지 대체텍스트"]
   ];
   return <main className="max-w-4xl mx-auto px-5 py-10 space-y-6">
     <a href="/admin">← 관리자</a>
