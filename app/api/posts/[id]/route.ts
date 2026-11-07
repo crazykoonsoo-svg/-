@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
 import { getPostExtraFields } from "@/lib/post-extra-fields";
 
@@ -31,6 +32,8 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       meta_description: body.metaDescription, updated_at: new Date().toISOString(),
     }).eq("id", params.id).select().single();
     if (error) throw error;
+    revalidatePath("/");
+    revalidatePath(`/blog/${data.slug}`);
     return NextResponse.json({ post: data });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });
