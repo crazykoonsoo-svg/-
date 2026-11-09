@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { toKoreaDateTimeInput } from "@/lib/dates";
 import { useRouter } from "next/navigation";
 
 export default function EditPostPage({ params }: { params: { id: string } }) {
@@ -7,6 +8,8 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
   const [post, setPost] = useState<any>(null);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [wasPublished, setWasPublished] = useState(false);
+  const [publicationCorrection, setPublicationCorrection] = useState<string | undefined>();
   useEffect(() => {
     let active = true;
     fetch("/api/posts?admin=true", { cache: "no-store" })
@@ -16,6 +19,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         const found = posts.find((p: any) => String(p.id) === params.id);
         if (!found) throw new Error("글을 찾을 수 없습니다.");
         setPost(found);
+        setWasPublished(found.status === "published");
       }).catch(e => { if (active) setError(e.message); });
     return () => { active = false; };
   }, [params.id]);
@@ -27,6 +31,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       const res = await fetch(`/api/posts/${params.id}`, {
         method: "PUT", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          publishedAt: publicationCorrection,
           title: post.title, slug: post.slug, excerpt: post.excerpt,
           content: post.content, category: post.category, tags: post.tags,
           coverImage: post.cover_image, coverImageAlt: post.cover_image_alt,
@@ -61,6 +66,14 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         <option value="published">발행</option>
       </select>
     </label>
+    {wasPublished && <label className="block">
+      <span className="block font-semibold mb-2">발행 시각 (한국시간)</span>
+      <input type="datetime-local" step="0.001" className="w-full border rounded-lg p-3"
+        value={toKoreaDateTimeInput(publicationCorrection ?? post.published_at)}
+        onChange={e => setPublicationCorrection(e.target.value ? `${e.target.value}+09:00` : "")} />
+      <span className="block text-sm text-gray-500 mt-2">실제 공개한 시각입니다. 일반 수정 저장으로는 발행일이 바뀌지 않습니다.</span>
+    </label>}
+    {!wasPublished && <p className="text-sm text-gray-500">발행 시각은 공개 전환을 저장할 때 한국시간 기준으로 자동 기록됩니다.</p>}
     {fields.map(([key, label]) => <label key={key} className="block">
       <span className="block font-semibold mb-2">{label}</span>
       <input className="w-full border rounded-lg p-3" value={post[key] || ""} onChange={e => change(key, e.target.value)} />

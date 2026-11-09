@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import { formatPostDate, toKoreaDateTimeInput } from '../lib/dates.ts';
+import { publicationTime } from '../lib/publication.ts';
+
+assert.equal(formatPostDate('2026-11-08T14:59:59Z'), '2026.11.08');
+assert.equal(formatPostDate('2026-11-08T15:00:00Z', true), '2026년 11월 9일');
+assert.equal(formatPostDate('2026-12-31T15:00:00Z'), '2027.01.01');
+assert.equal(formatPostDate(null), '');
+assert.equal(formatPostDate('invalid'), '');
+assert.equal(toKoreaDateTimeInput('2026-11-08T16:03:43.662Z'), '2026-11-09T01:03:43.662');
+const now = '2026-11-09T02:00:00.000Z';
+const old = '2026-11-08T16:00:42.396Z';
+assert.equal(publicationTime(null, 'draft', undefined, now), null);
+assert.equal(publicationTime(null, 'published', old, now), now);
+assert.equal(publicationTime({status: 'draft', published_at: old}, 'published', old, now), now);
+assert.equal(publicationTime({status: 'published', published_at: old}, 'published', undefined, now), old);
+assert.equal(publicationTime({status: 'published', published_at: old}, undefined, undefined, now), old);
+assert.equal(publicationTime({status: 'published', published_at: old}, 'published', '2026-11-09T01:03:43.662+09:00', now), '2026-11-08T16:03:43.662Z');
+assert.throws(() => publicationTime({status: 'published', published_at: old}, 'published', '2026-11-09T01:00', now));
+assert.throws(() => publicationTime({status: 'published', published_at: old}, 'published', '2026-11-10T00:00:00Z', now));
+console.log('Publication date checks passed');

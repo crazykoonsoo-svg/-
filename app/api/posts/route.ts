@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       content: body.content ?? "", category: body.category ?? "일반",
       tags: body.tags ?? [], cover_image: body.coverImage ?? "",
       cover_image_alt: body.coverImageAlt ?? "", author: body.author ?? "이바우펫 애견미용학원",
-      published_at: body.publishedAt ?? now, status: body.status ?? "draft",
+      published_at: body.status === "published" ? now : null, status: body.status ?? "draft",
       meta_title: body.metaTitle ?? body.title, meta_description: body.metaDescription ?? "",
       canonical_url: body.canonicalUrl ?? "", og_image: body.ogImage ?? "",
       faq_items: body.faqItems ?? [], summary: body.summary ?? "",

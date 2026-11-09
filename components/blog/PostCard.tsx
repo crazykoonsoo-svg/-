@@ -1,5 +1,6 @@
 // components/blog/PostCard.tsx
 
+import { formatPostDate } from "@/lib/dates";
 import Image from "next/image";
 import Link from "next/link";
 import { Post } from "@/types/post";
@@ -10,13 +11,7 @@ interface PostCardProps {
 }
 
 function formatDate(dateStr: string): string {
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return "";
-    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-  } catch {
-    return "";
-  }
+  return formatPostDate(dateStr);
 }
 
 function isNew(dateStr: string): boolean {

@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
+import { publicationTime } from "@/lib/publication";
 import { getPostExtraFields } from "@/lib/post-extra-fields";
 
 function getSupabase() {
@@ -23,17 +24,27 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       return NextResponse.json({ error: (error as Error).message }, { status: 400 });
     }
     const supabase = getSupabase();
+    const { data: current, error: readError } = await supabase.from("posts")
+      .select("status,published_at").eq("id", params.id).single();
+    if (readError) throw readError;
+    const now = new Date().toISOString();
+    let publishedAt;
+    try { publishedAt = publicationTime(current, body.status, body.publishedAt, now); }
+    catch (error) { return NextResponse.json({ error: (error as Error).message }, { status: 400 }); }
     const { data, error } = await supabase.from("posts").update({
+      published_at: publishedAt,
       ...extraFields,
       title: body.title, slug: body.slug, excerpt: body.excerpt,
       content: body.content, category: body.category, tags: body.tags,
       cover_image: body.coverImage, cover_image_alt: body.coverImageAlt,
       status: body.status, meta_title: body.metaTitle,
-      meta_description: body.metaDescription, updated_at: new Date().toISOString(),
+      meta_description: body.metaDescription, updated_at: now,
     }).eq("id", params.id).select().single();
     if (error) throw error;
     revalidatePath("/");
     revalidatePath(`/blog/${data.slug}`);
+    revalidatePath("/rss.xml");
+    revalidatePath("/sitemap.xml");
     return NextResponse.json({ post: data });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });

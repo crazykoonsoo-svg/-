@@ -1,4 +1,5 @@
 import { Post, Category, Tag } from "@/types/post";
+import { publicationTime } from "@/lib/publication";
 import { getPostExtraFields } from "@/lib/post-extra-fields";
 
 // 목록/집계용 조회에서는 글 본문(content)처럼 무거운 컬럼을 빼고 가져옵니다.
@@ -36,7 +37,7 @@ function toPost(row: any): Post {
     excerpt: row.excerpt ?? "", content: row.content ?? "",
     category: row.category ?? "일반", tags: row.tags ?? [],
     coverImage: row.cover_image ?? "", coverImageAlt: row.cover_image_alt ?? "",
-    author: row.author ?? "이바우펫 애견미용학원", publishedAt: row.published_at,
+    author: row.author ?? "이바우펫 애견미용학원", publishedAt: row.published_at ?? "",
     updatedAt: row.updated_at, status: row.status,
     metaTitle: row.meta_title ?? "", metaDescription: row.meta_description ?? "",
     canonicalUrl: row.canonical_url ?? "", ogImage: row.og_image ?? "",
@@ -130,7 +131,7 @@ export async function createPost(post: Post): Promise<Post> {
     title: post.title, slug: post.slug, excerpt: post.excerpt,
     content: post.content, category: post.category, tags: post.tags,
     cover_image: post.coverImage, cover_image_alt: post.coverImageAlt,
-    author: post.author, published_at: post.publishedAt, status: post.status,
+    author: post.author, published_at: post.status === "published" ? new Date().toISOString() : null, status: post.status,
     meta_title: post.metaTitle, meta_description: post.metaDescription,
     canonical_url: post.canonicalUrl, og_image: post.ogImage,
     faq_items: post.faqItems, summary: post.summary,
@@ -143,13 +144,19 @@ export async function createPost(post: Post): Promise<Post> {
 export async function updatePost(id: string, data: Partial<Post>): Promise<Post | null> {
   const supabase = getSupabase();
   if (!supabase) return null;
+  const { data: current, error: readError } = await supabase.from("posts")
+    .select("status,published_at").eq("id", id).single();
+  if (readError) return null;
+  const now = new Date().toISOString();
+  const publishedAt = publicationTime(current, data.status, data.publishedAt, now);
   const { data: updated, error } = await supabase.from("posts").update({
+    published_at: publishedAt,
     ...getPostExtraFields(data),
     title: data.title, slug: data.slug, excerpt: data.excerpt,
     content: data.content, category: data.category, tags: data.tags,
     cover_image: data.coverImage, status: data.status,
     meta_title: data.metaTitle, meta_description: data.metaDescription,
-    updated_at: new Date().toISOString(),
+    updated_at: now,
   }).eq("id", id).select().single();
   if (error) return null;
   return toPost(updated);

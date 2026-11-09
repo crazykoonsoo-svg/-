@@ -1,16 +1,13 @@
 "use client";
 
+import { formatPostDate } from "@/lib/dates";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Post } from "@/types/post";
 import { Plus, Edit, Trash2, Eye, EyeOff } from "lucide-react";
 
 function formatDate(dateStr: string): string {
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return "-";
-    return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-  } catch { return "-"; }
+  return formatPostDate(dateStr) || "-";
 }
 
 export default function AdminPage() {
@@ -84,7 +81,7 @@ export default function AdminPage() {
                     <p className="font-medium text-gray-900 truncate text-sm">{post.title}</p>
                     <p className="text-xs text-gray-400 mt-0.5">
                       {post.category && <span className="mr-2">📁 {post.category}</span>}
-                      {formatDate(post.publishedAt)}
+                      {formatDate(post.publishedAt || (post as any).published_at)}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

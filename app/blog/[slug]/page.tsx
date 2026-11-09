@@ -1,5 +1,6 @@
 export const dynamicParams = true;
 
+import { formatPostDate } from "@/lib/dates";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import type { Metadata } from "next";
@@ -17,11 +18,7 @@ import ScrollProgress from "@/components/blog/ScrollProgress";
 import GiscusComments from "@/components/blog/GiscusComments";
 
 function formatDate(dateStr: string): string {
-  try {
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) return "";
-    return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
-  } catch { return ""; }
+  return formatPostDate(dateStr, true);
 }
 
 export async function generateStaticParams() {
