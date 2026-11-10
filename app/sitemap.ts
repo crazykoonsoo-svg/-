@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { MetadataRoute } from "next";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, SEARCH_CATEGORY } from "@/lib/seo";
 
 // updatedAt/publishedAt이 비어있거나 잘못된 값이면 new Date()가 "Invalid Date"를 만들고,
 // 이걸 sitemap이 문자열로 변환하려는 순간 에러가 나서 전체 sitemap 생성이 실패했습니다
@@ -20,10 +20,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { getAllPosts } = await import("@/lib/posts");
     const posts = await getAllPosts();
 
-    // Only indexable pages belong in the sitemap; tag/category archives are noindex.
+    // The cost guide is the only category with a standalone search landing page.
     return [
       { url: SITE_URL, lastModified: now, changeFrequency: "daily", priority: 1.0 },
       { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.5 },
+      ...(posts.some((post) => post.category === SEARCH_CATEGORY) ? [
+        { url: `${SITE_URL}/blog/category/${encodeURIComponent(SEARCH_CATEGORY)}`, changeFrequency: "weekly" as const },
+      ] : []),
       ...posts.map((post) => ({
         url: `${SITE_URL}/blog/${post.slug}`,
         lastModified: safeDate(post.updatedAt || post.publishedAt, now),

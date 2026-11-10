@@ -54,18 +54,34 @@ export function getDefaultMetadata(): Metadata {
   };
 }
 
+export function getPostAuthor(post: Post): string {
+  return post.author && post.author !== "관리자" ? post.author : AUTHOR_NAME;
+}
+
+const LANDSCAPE_COVERS = new Set([
+  "pet-20260618-006",
+  "pet-grooming-20260528-853",
+  "gwangju-pet-grooming-school-guide",
+]);
+
+export function getPostImage(post: Post): string {
+  if (LANDSCAPE_COVERS.has(post.slug)) return `${SITE_URL}/og/${post.slug}.jpg`;
+  return post.ogImage || post.coverImage || `${SITE_URL}/hero-banner.png`;
+}
+
 export function getPostMetadata(post: Post): Metadata {
   const url = `${SITE_URL}/blog/${post.slug}`;
   const title = post.metaTitle || post.title;
   const description = post.metaDescription || post.excerpt;
-  const image = post.ogImage || post.coverImage || `${SITE_URL}/hero-banner.png`;
+  const image = getPostImage(post);
+  const author = getPostAuthor(post);
   const canonical = post.canonicalUrl || url;
 
   return {
     title,
     description,
     keywords: post.tags,
-    authors: [{ name: AUTHOR_NAME }],
+    authors: [{ name: author }],
     openGraph: {
       type: "article",
       locale: "ko_KR",
@@ -73,10 +89,14 @@ export function getPostMetadata(post: Post): Metadata {
       siteName: SITE_NAME,
       title,
       description,
-      images: [{ url: image, width: 1200, height: 630, alt: post.coverImageAlt || title }],
+      images: [{
+        url: image,
+        ...(LANDSCAPE_COVERS.has(post.slug) ? { width: 1200, height: 675 } : {}),
+        alt: post.coverImageAlt || title,
+      }],
       publishedTime: post.publishedAt,
       modifiedTime: post.updatedAt,
-      authors: [AUTHOR_NAME],
+      authors: [author],
       section: post.category,
       tags: post.tags,
     },
@@ -87,24 +107,29 @@ export function getPostMetadata(post: Post): Metadata {
       images: [image],
     },
     alternates: { canonical },
-    robots: { index: true, follow: true },
+    robots: { index: true, follow: true, "max-image-preview": "large" },
   };
 }
 
-// 카테고리별 맞춤 설명
-const CATEGORY_DESCRIPTIONS: Record<string, string> = {
-  "견종": "견종별 특징과 성격부터 털빠짐, 빗질·목욕·미용 스타일, 산책과 입양 전 준비 비용까지 살펴보세요.",
-  "국비지원": "애견미용학원 국비지원(내일배움카드)·연맹지원 정보를 한곳에서 확인하세요. 지역별 국비지원 조건, 신청 방법, 비용 절감 방법까지 2026년 최신 정보 제공. 서울·분당·일산·대전·광주·인천·대구·노원·부천·천호·평택·강남·창원·부산·천안·서면 전국 애견미용학원 국비지원 안내.",
-  "애견미용학원": "전국 애견미용학원 정보를 한곳에서 확인하세요. 실견수업·가정견 실습·자격증 취득까지 꼭 확인해야 할 선택 기준을 현실적으로 정리했습니다. 서울·분당·일산·대전·광주·인천·대구·노원·부천·천호·평택·강남·창원·부산·천안·서면 전국 애견미용학원 추천.",
-  "취업·창업": "애견미용사 취업·창업 준비 정보를 한곳에서 확인하세요. 포트폴리오 제작, 취업 연계, 창업 컨설팅까지 2026년 최신 현실 가이드 제공. 서울·분당·일산·대전·광주·인천·대구·노원·부천·천호·평택·강남·창원·부산·천안·서면 전국 애견미용 취업·창업 정보.",
-  "비용": "애견미용학원 비용·수강료 정보를 한곳에서 확인하세요. 국비지원·연맹 교육지원으로 비용을 낮추는 방법과 지역별 수강료 비교 정보를 제공합니다. 서울·분당·일산·대전·광주·인천·대구·노원·부천·천호·평택·강남·창원·부산·천안·서면 전국 애견미용학원 비용 안내.",
-  "교육": "애견미용 교육과정·커리큘럼 정보를 한곳에서 확인하세요. 3급·2급 자격증 취득, 실견수업, 가정견 실습까지 단계별 교육 정보를 제공합니다. 서울·분당·일산·대전·광주·인천·대구·노원·부천·천호·평택·강남·창원·부산·천안·서면 전국 애견미용 교육 정보.",
+export const SEARCH_CATEGORY = "비용";
+
+export const CATEGORY_INFO: Record<string, { title: string; description: string }> = {
+  "견종": { title: "견종별 미용과 털 관리", description: "견종에 따라 달라지는 털 빠짐, 빗질, 목욕과 미용 방법을 살펴보세요." },
+  "교육": { title: "애견미용 교육과정과 실습 준비", description: "기초 도구, 실견수업과 강사 피드백 등 수업에서 확인할 항목을 정리했습니다." },
+  "애견미용학원": { title: "지역별 애견미용학원과 상담 기준", description: "가까운 교육기관을 찾을 때 실견 실습, 출석 일정과 상담에서 확인할 기준을 살펴보세요." },
+  "자격증": { title: "애견미용 자격증 준비와 실기 연습", description: "민간자격의 종류, 3급·2급 준비와 필기·실기 확인 방법을 안내합니다." },
+  "취업·창업": { title: "애견미용사 취업과 미용실 창업 준비", description: "구직, 포트폴리오, 첫 근무와 미용실 운영을 준비할 때 확인할 내용을 살펴보세요." },
+  "비용": { title: "애견미용학원 비용과 별도 지출 확인 기준", description: "애견미용학원 수강료와 도구비, 재료비, 시험 응시료를 나눠 확인하고 과정별 총비용을 비교하는 기준을 정리했습니다." },
+  "이바우펫": { title: "이바우펫 애견미용학원 과정과 지점 안내", description: "이바우펫의 수업과 지점별 통학, 방문상담 전 확인할 내용을 살펴보세요." },
+  "국비지원": { title: "애견미용학원 국비지원과 자부담 확인", description: "고용24 과정의 국비지원 조건과 자부담을 확인하고, 학원 교육지원과 구분해 살펴보세요." },
 };
 
 export function getCategoryMetadata(category: string, count: number): Metadata {
-  const title = `${category} 관련 글 ${count}개`;
-  const description = CATEGORY_DESCRIPTIONS[category] ||
-    `애견미용 ${category} 관련 정보 ${count}개를 한곳에서 확인하세요. 2026년 최신 정보를 현실적으로 정리했습니다.`;
+  const { title, description } = CATEGORY_INFO[category] ?? {
+    title: `애견미용 ${category} 정보`,
+    description: `${category}에 관한 애견미용 정보를 살펴보세요.`,
+  };
+  const index = category === SEARCH_CATEGORY && count > 0;
 
   return {
     title,
@@ -122,7 +147,7 @@ export function getCategoryMetadata(category: string, count: number): Metadata {
       description,
     },
     alternates: { canonical: `${SITE_URL}/blog/category/${encodeURIComponent(category)}` },
-    robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
+    robots: { index, follow: true, googleBot: { index, follow: true } },
   };
 }
 

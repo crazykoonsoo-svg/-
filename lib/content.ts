@@ -28,3 +28,13 @@ export function splitBeforeHeading(html: string, n = 3): [string, string] {
   }
   return [html.slice(0, idx), html.slice(idx)];
 }
+
+/** 본문은 글 제목 H1 아래에서 시작하므로 하위 단계가 건너뛰는 곳만 보정합니다. */
+export function normalizeArticleHeadings(html: string): string {
+  let previous = 1;
+  return html.replace(/<h([2-6])(\b[^>]*)>([\s\S]*?)<\/h\1>/gi, (_tag, level, attrs, body) => {
+    const current = Math.min(Number(level), previous + 1);
+    previous = current;
+    return `<h${current}${attrs}>${body}</h${current}>`;
+  });
+}

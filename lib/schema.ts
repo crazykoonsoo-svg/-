@@ -1,21 +1,20 @@
 // lib/schema.ts
 import { Post } from "@/types/post";
-import { SITE_URL, SITE_NAME, AUTHOR_NAME } from "./seo";
+import { SITE_URL, SITE_NAME, AUTHOR_NAME, getPostAuthor, getPostImage } from "./seo";
 
 export function getArticleSchema(post: Post) {
+  const authorName = getPostAuthor(post);
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription || post.excerpt,
-    image: post.coverImage ? [post.coverImage] : [`${SITE_URL}/hero-banner.png`],
+    image: [getPostImage(post)],
     datePublished: post.publishedAt,
     dateModified: post.updatedAt || post.publishedAt,
-    author: {
-      "@type": "Organization",
-      name: AUTHOR_NAME,
-      url: "https://evaw-pet-grooming.co.kr/",
-    },
+    author: authorName === "이바우펫 애견미용학원" || authorName === AUTHOR_NAME
+      ? { "@type": "Organization", name: authorName, url: "https://evaw-pet-grooming.co.kr/" }
+      : { "@type": "Person", name: authorName },
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
@@ -49,21 +48,6 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
   };
 }
 
-export function getFAQSchema(faqs: { question: string; answer: string }[]) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqs.map((faq) => ({
-      "@type": "Question",
-      name: faq.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: faq.answer,
-      },
-    })),
-  };
-}
-
 export function getWebsiteSchema() {
   return {
     "@context": "https://schema.org",
@@ -86,7 +70,7 @@ export function getOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "이바우펫 애견미용학원 (Evaw Pet)",
+    name: "이바우펫 애견미용학원",
     url: "https://evaw-pet-grooming.co.kr/",
     logo: `${SITE_URL}/icon.png`,
     sameAs: [
