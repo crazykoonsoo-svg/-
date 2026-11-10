@@ -42,7 +42,7 @@ export default function Sidebar({ categories, popularPosts, tags }: Props) {
 
       {/* 사이드바 배너 */}
       <a
-        href="http://evaw-pet-grooming.co.kr/"
+        href="https://evaw-pet-grooming.co.kr/"
         target="_blank"
         rel="noopener noreferrer"
         className="block"

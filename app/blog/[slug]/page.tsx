@@ -6,13 +6,13 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { getAllPosts, getPostBySlug, getRelatedPosts, getAdjacentPosts } from "@/lib/posts";
 import { getPostMetadata } from "@/lib/seo";
-import { lazyContentImages, splitBeforeHeading } from "@/lib/content";
-import { getArticleSchema, getBreadcrumbSchema, getFAQSchema, serializeSchema } from "@/lib/schema";
+import { lazyContentImages, normalizeArticleHeadings, splitBeforeHeading } from "@/lib/content";
+import { getArticleSchema, getBreadcrumbSchema, serializeSchema } from "@/lib/schema";
 import TableOfContents from "@/components/blog/TableOfContents";
 import RelatedPosts from "@/components/blog/RelatedPosts";
 import PostNavigation from "@/components/blog/PostNavigation";
 import ShareButtons from "@/components/blog/ShareButtons";
-import { SITE_URL, AUTHOR_NAME } from "@/lib/seo";
+import { SITE_URL, getPostAuthor } from "@/lib/seo";
 import { Clock, Calendar, Folder, Tag, PenLine } from "lucide-react";
 import ScrollProgress from "@/components/blog/ScrollProgress";
 import GiscusComments from "@/components/blog/GiscusComments";
@@ -51,7 +51,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const { prev, next } = await getAdjacentPosts(params.slug);
 
   // 작성자 표시: 예전 기본값 "관리자"는 학원 이름으로 보여줌
-  const authorName = post.author && post.author !== "관리자" ? post.author : AUTHOR_NAME;
+  const authorName = getPostAuthor(post);
   const updatedLabel = post.updatedAt && formatDate(post.updatedAt) !== formatDate(post.publishedAt) ? formatDate(post.updatedAt) : "";
 
   const readingTime = post.readingTime ?? Math.ceil((post.content || "").replace(/<[^>]+>/g, "").split(/\s+/).length / 300);
@@ -61,10 +61,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     { name: post.category, url: `${SITE_URL}/blog/category/${encodeURIComponent(post.category)}` },
     { name: post.title, url: `${SITE_URL}/blog/${post.slug}` },
   ]);
-  const faqSchema = post.faqItems && post.faqItems.length > 0 ? getFAQSchema(post.faqItems) : null;
 
   // 본문 이미지 지연 로딩 + 세 번째 소제목 앞에 "함께 읽으면 좋은 글" 넣기
-  const [contentTop, contentRest] = splitBeforeHeading(lazyContentImages(post.content || ""), 3);
+  const [contentTop, contentRest] = splitBeforeHeading(lazyContentImages(normalizeArticleHeadings(post.content || "")), 3);
   const inlineRelated = contentRest ? relatedPosts.slice(0, 3) : [];
 
   return (
@@ -72,7 +71,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <ScrollProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeSchema(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeSchema(breadcrumbSchema) }} />
-      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeSchema(faqSchema) }} />}
 
       <div className="max-w-[1160px] mx-auto px-5 lg:px-6 py-8 lg:py-10">
         <nav aria-label="breadcrumb" className="mb-6">
@@ -188,7 +186,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               <TableOfContents content={post.content} />
               {/* 사이드바 배너 */}
               <a
-                href="http://evaw-pet-grooming.co.kr/"
+                href="https://evaw-pet-grooming.co.kr/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block"

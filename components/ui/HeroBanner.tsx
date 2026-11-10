@@ -10,7 +10,7 @@ const slides = [
   { src: "/slide-4.png", alt: "이바우펫 애견미용학원 적성파악 클래스" },
 ];
 
-const LINK = "http://evaw-pet-grooming.co.kr/";
+const LINK = "https://evaw-pet-grooming.co.kr/";
 const INTERVAL = 2000; // 2초마다 자동 슬라이드
 
 export default function HeroBanner() {

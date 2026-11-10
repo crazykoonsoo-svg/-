@@ -7,8 +7,8 @@ import "./academy-top.css";
 
 const SITE = "https://evaw-pet-grooming.co.kr";
 const PHONE = "010-3766-1620";
-const KAKAO = "http://pf.kakao.com/_xaNjrn/chat";
-const NAVER = "http://talk.naver.com/W5IPUB";
+const KAKAO = "https://pf.kakao.com/_xaNjrn/chat";
+const NAVER = "https://talk.naver.com/W5IPUB";
 
 const CURRICULUM = [
   { num: "1", name: "기초과정", sub: "입문 ~ 기본 그루밍", tag: "입문", tone: "blue" },

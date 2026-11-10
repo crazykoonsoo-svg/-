@@ -38,6 +38,7 @@ export default async function TagPage({ params }: { params: { tag: string } }) {
       </div>
     </header>
     <div className="max-w-[1160px] mx-auto px-5 lg:px-6 py-12">
+      <h2 className="sr-only">태그 글 목록</h2>
       {posts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {posts.map((post) => <PostCard key={post.slug} post={post} />)}

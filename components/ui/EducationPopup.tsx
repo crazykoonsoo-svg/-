@@ -75,7 +75,7 @@ export default function EducationPopup({ variant = "sidebar" }: Props) {
               />
               {/* 마지막 이미지 — 클릭 시 상담 링크 이동 */}
               <a
-                href="http://evaw-pet-grooming.co.kr/"
+                href="https://evaw-pet-grooming.co.kr/"
                 target="_blank"
                 rel="noopener noreferrer"
               >

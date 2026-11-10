@@ -63,7 +63,7 @@ export default function AboutPage() {
             애견미용 학원 선택, 자격증 취득, 국비지원 등 궁금한 점이 있으시면 아래 버튼으로 문의해 주세요.
           </p>
           <a
-            href="http://evaw-pet-grooming.co.kr/"
+            href="https://evaw-pet-grooming.co.kr/"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold px-6 py-3 rounded-lg transition-colors"
