@@ -61,6 +61,18 @@ export async function getAllPosts(): Promise<Post[]> {
   return (data ?? []).map(toPost);
 }
 
+export async function getRecentPostsForFeed(limit: number): Promise<Post[]> {
+  const supabase = getSupabase();
+  if (!supabase) return [];
+  const { data, error } = await supabase.from("posts")
+    .select("id, title, slug, excerpt, content, category, published_at, updated_at, status")
+    .eq("status", "published")
+    .order("published_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []).map(toPost);
+}
+
 export async function getAllPostsAdmin(): Promise<Post[]> {
   const supabase = getSupabase();
   if (!supabase) return [];

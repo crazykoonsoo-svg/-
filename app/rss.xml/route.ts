@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from "next/server";
-import { getAllPosts } from "@/lib/posts";
+import { getRecentPostsForFeed } from "@/lib/posts";
 import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "@/lib/seo";
 
 function toRFC2822(dateStr: string): string | undefined {
@@ -11,7 +11,7 @@ function toRFC2822(dateStr: string): string | undefined {
 
 export async function GET() {
   try {
-    const posts = (await getAllPosts()).slice(0, 20);
+    const posts = await getRecentPostsForFeed(20);
     const lastBuildTime = posts
       .flatMap(({ publishedAt, updatedAt }) => [Date.parse(publishedAt), Date.parse(updatedAt)])
       .filter(Number.isFinite)
