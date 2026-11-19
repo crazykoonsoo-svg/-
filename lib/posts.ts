@@ -1,4 +1,5 @@
 import { Post, Category, Tag } from "@/types/post";
+import { preparePublishedArticle } from "@/lib/content";
 import { publicationTime } from "@/lib/publication";
 import { getPostExtraFields } from "@/lib/post-extra-fields";
 
@@ -70,7 +71,10 @@ export async function getRecentPostsForFeed(limit: number): Promise<Post[]> {
     .order("published_at", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return (data ?? []).map(toPost);
+  return (data ?? []).map(toPost).map((post: Post) => ({
+    ...post,
+    content: preparePublishedArticle(post.content, post.slug),
+  }));
 }
 
 export async function getAllPostsAdmin(): Promise<Post[]> {
@@ -85,7 +89,10 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   if (!supabase) return null;
   const { data } = await supabase.from("posts").select("*").eq("slug", slug).single();
   if (!data) return null;
-  return toPost(data);
+  const post = toPost(data);
+  return post.status === "published"
+    ? { ...post, content: preparePublishedArticle(post.content, post.slug) }
+    : post;
 }
 
 export async function getRelatedPosts(post: Post, limit = 3): Promise<Post[]> {
