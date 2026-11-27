@@ -1,3 +1,5 @@
+import { addArticleLink } from "@/lib/article-links";
+
 // lib/content.ts
 // 글 본문 HTML을 화면에 내보내기 전에 다듬는 도우미
 
@@ -63,7 +65,7 @@ export function preparePublishedArticle(html: string, slug: string): string {
   if (slug === "pet-grooming-20260516-746" &&
       html.includes("교육 선택 전 확인할 실제 준비 항목") &&
       html.includes("실견수업과 애견미용자격증 과정의 차이")) {
-    return seoulCommuteGuide;
+    html = seoulCommuteGuide;
   }
 
   if (slug === "petgrooming-20260615-007") {
@@ -81,10 +83,11 @@ export function preparePublishedArticle(html: string, slug: string): string {
     }
   );
 
-  return html.replace(academyHomeLink, (_anchor, attrs: string, _quote, images: string) => {
+  const content = html.replace(academyHomeLink, (_anchor, attrs: string, _quote, images: string) => {
     const secureAttrs = attrs.replace(
       /(\shref\s*=\s*["'])http:\/\//i, "$1https://"
     );
     return `<a${secureAttrs}>${images}<span style="display:block;margin-top:.25rem">이바우펫 공식 홈페이지 보기</span></a>`;
   });
+  return addArticleLink(content, slug);
 }
