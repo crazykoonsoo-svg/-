@@ -75,7 +75,7 @@ export default function NewPostPage() {
 
   const addTag = () => {
     const tag = tagInput.trim();
-    if (tag && !form.tags.includes(tag)) update("tags", [...form.tags, tag]);
+    if (tag && form.tags.length < 5 && !form.tags.includes(tag)) update("tags", [...form.tags, tag]);
     setTagInput("");
   };
 
@@ -93,6 +93,10 @@ export default function NewPostPage() {
     if (!form.title) { alert("제목을 입력해주세요."); return; }
     if (!form.slug) { alert("슬러그를 입력해주세요."); return; }
     if (!form.content) { alert("본문을 작성해주세요."); return; }
+    if (status === "published" && form.tags.length < 3) {
+      alert("본문과 관련 있는 핵심 태그를 3~5개 입력해주세요.");
+      return;
+    }
 
     setSaving(true);
     try {
@@ -384,14 +388,14 @@ export default function NewPostPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-500 mb-1.5">태그</label>
+                  <label className="block text-xs text-gray-500 mb-1.5">핵심 태그 (3~5개)</label>
                   <div className="flex gap-2 mb-2">
                     <input type="text" value={tagInput} onChange={(e) => setTagInput(e.target.value)}
                       onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addTag(); } }}
                       className="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                       placeholder="태그 입력 후 Enter" />
-                    <button type="button" onClick={addTag}
-                      className="px-3 py-1.5 text-sm bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200">추가</button>
+                    <button type="button" onClick={addTag} disabled={form.tags.length >= 5}
+                      className="px-3 py-1.5 text-sm bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 disabled:opacity-50">추가</button>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
                     {form.tags.map((tag) => (

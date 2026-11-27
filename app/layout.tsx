@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_DESCRIPTION, SITE_KEYWORDS } from "@/lib/seo";
+import { AUTHOR_NAME, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/seo";
 import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
@@ -15,16 +15,15 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.evaw-pet-grooming.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "애견미용 자격증·국비지원·학원 정보 | 애견미용 관련 모든정보",
-    template: "%s | 애견미용 관련 모든정보",
+    default: `애견미용 자격증·국비지원·학원 정보 | ${SITE_NAME}`,
+    template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
-  keywords: SITE_KEYWORDS,
-  authors: [{ name: "이바우펫 애견미용학원" }],
-  creator: "이바우펫 애견미용학원",
-  publisher: "애견미용 관련 모든정보",
+  authors: [{ name: AUTHOR_NAME }],
+  creator: AUTHOR_NAME,
+  publisher: SITE_NAME,
   robots: {
     index: true,
     follow: true,
@@ -39,28 +38,28 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://www.evaw-pet-grooming.com",
-    siteName: "애견미용 관련 모든정보",
-    title: "애견미용 자격증·국비지원·학원 정보 | 애견미용 관련 모든정보",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `애견미용 자격증·국비지원·학원 정보 | ${SITE_NAME}`,
     description: SITE_DESCRIPTION,
     images: [
       {
         url: "/og-main.jpg",
         width: 1200,
         height: 630,
-        alt: "애견미용 관련 모든정보 - 자격증·국비지원·학원 정보",
+        alt: `${SITE_NAME} - 자격증·국비지원·학원 정보`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "애견미용 자격증·국비지원·학원 정보 | 애견미용 관련 모든정보",
+    title: `애견미용 자격증·국비지원·학원 정보 | ${SITE_NAME}`,
     description: SITE_DESCRIPTION,
     images: ["/og-main.jpg"],
   },
   alternates: {
-    canonical: "https://www.evaw-pet-grooming.com",
-    types: { "application/rss+xml": "https://www.evaw-pet-grooming.com/rss.xml" },
+    canonical: SITE_URL,
+    types: { "application/rss+xml": `${SITE_URL}/rss.xml` },
   },
 };
 
