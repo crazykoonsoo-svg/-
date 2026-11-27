@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_NAME } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "블로그 소개",
@@ -10,13 +11,13 @@ export default function AboutPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">블로그 소개</h1>
-      <p className="text-gray-500 mb-10">애견미용 관련 모든정보 운영 안내</p>
+      <p className="text-gray-500 mb-10">{SITE_NAME} 운영 안내</p>
 
       <div className="space-y-10">
         <section>
           <h2 className="text-xl font-bold text-gray-900 mb-3">이 블로그는 무엇인가요?</h2>
           <p className="text-gray-700 leading-relaxed">
-            <strong>애견미용 관련 모든정보</strong>는 애견미용을 배우고 싶은 분, 자격증 취득을 준비하는 분,
+            <strong>{SITE_NAME}</strong>는 애견미용을 배우고 싶은 분, 자격증 취득을 준비하는 분,
             학원 선택을 고민하는 분들을 위한 전문 정보 블로그입니다.
             국비지원, 사단법인한국유기견구호연맹지원, 비용 비교, 지역별 학원 정보 등
             실제 수강생 관점에서 현실적인 정보를 제공합니다.
@@ -77,9 +78,9 @@ export default function AboutPage() {
           <table className="w-full text-sm">
             <tbody className="divide-y divide-gray-100">
               {[
-                ["사이트명", "애견미용 관련 모든정보"],
+                ["사이트명", SITE_NAME],
                 ["도메인", "www.evaw-pet-grooming.com"],
-                ["운영", "PETgpt"],
+                ["운영", SITE_NAME],
                 ["개설", "2026년 5월"],
                 ["주제", "애견미용 자격증·국비지원·학원·비용·취업·창업"],
               ].map(([label, value]) => (

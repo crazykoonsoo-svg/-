@@ -1,7 +1,8 @@
 export const dynamic = 'force-dynamic';
 
 import { MetadataRoute } from "next";
-import { SITE_URL, SEARCH_CATEGORY } from "@/lib/seo";
+import { SITE_URL } from "@/lib/seo";
+import { isPostIndexable } from "@/lib/post-indexing";
 
 function validDate(value?: string): Date | undefined {
   if (!value) return undefined;
@@ -15,14 +16,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { getAllPosts } = await import("@/lib/posts");
     const posts = await getAllPosts();
 
-    // The cost guide is the only category with a standalone search landing page.
     return [
       { url: SITE_URL, changeFrequency: "daily", priority: 1.0 },
       { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.5 },
-      ...(posts.some((post) => post.category === SEARCH_CATEGORY) ? [
-        { url: `${SITE_URL}/blog/category/${encodeURIComponent(SEARCH_CATEGORY)}`, changeFrequency: "weekly" as const },
-      ] : []),
-      ...posts.map((post) => ({
+      ...posts.filter((post) => isPostIndexable(post.slug)).map((post) => ({
         url: `${SITE_URL}/blog/${post.slug}`,
         lastModified: validDate(post.updatedAt) ?? validDate(post.publishedAt),
         changeFrequency: "weekly" as const,

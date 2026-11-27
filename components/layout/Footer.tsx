@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-[1.25fr_1fr_.8fr] gap-10 md:gap-[60px]">
           <div>
             <Link href="/" className="block text-[22px] font-bold tracking-[-1px] leading-tight text-white">
-              애견미용 관련 <span className="text-coral-light">모든정보</span>
+              이바우펫 <span className="text-coral-light">애견미용학원</span>
               <small className="block text-[10px] tracking-[2px] mt-2 font-medium text-[#a6beba]">ALL ABOUT PET GROOMING</small>
             </Link>
             <p className="mt-[18px] text-[#a6beba] leading-[1.8]">
@@ -33,7 +33,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="flex flex-wrap justify-between gap-x-5 gap-y-1.5 border-t border-[#456664] mt-[34px] pt-3.5 text-[11px] text-[#a6beba]">
-          <p>© {year} 애견미용 관련 모든정보. All rights reserved.</p>
+          <p>© {year} 이바우펫 애견미용학원. All rights reserved.</p>
           <a href="https://www.evaw-pet-grooming.com" className="hover:text-[#c9ece3]">www.evaw-pet-grooming.com</a>
         </div>
       </div>

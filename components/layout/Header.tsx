@@ -46,11 +46,11 @@ export default function Header() {
         <div className={`flex items-center ${isHome ? "gap-1.5" : "gap-3"} sm:gap-6 min-h-[64px] sm:min-h-[72px] lg:min-h-[84px]`}>
           {/* 로고 */}
           <Link href="/" className={`flex items-center ${isHome ? "gap-1.5 sm:gap-2.5 min-w-0 sm:shrink-0" : "gap-2.5 shrink-0"} hover:opacity-90 transition-opacity`}>
-            <Image src={LOGO_URL} alt="애견미용 관련 모든정보" width={40} height={40}
+            <Image src={LOGO_URL} alt="" width={40} height={40}
               className={`${isHome ? "w-7 h-7 max-[380px]:w-6 max-[380px]:h-6 shrink-0" : "w-9 h-9"} sm:w-10 sm:h-10 rounded-[10px] object-cover`} />
             <span className="leading-tight">
               <span className={`block ${isHome ? "text-[12px] max-[380px]:text-[11px] min-[400px]:text-[14px]" : "text-[17px]"} sm:text-[19px] lg:text-[19px] xl:text-[21px] font-bold tracking-[-1px] text-ink whitespace-nowrap`}>
-                애견미용 관련 <span className="text-coral">모든정보</span>
+                이바우펫 <span className="text-coral">애견미용학원</span>
               </span>
               <small className={`block ${isHome ? "text-[7px] min-[400px]:text-[8px] tracking-[.6px]" : "text-[9px] tracking-[1.6px]"} sm:text-[10px] sm:tracking-[2px] mt-1 font-medium text-muted whitespace-nowrap`}>ALL ABOUT PET GROOMING</small>
             </span>

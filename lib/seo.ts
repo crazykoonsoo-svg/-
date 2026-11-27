@@ -1,21 +1,20 @@
 // lib/seo.ts
 import { Post } from "@/types/post";
 import { Metadata } from "next";
+import { isPostIndexable } from "@/lib/post-indexing";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.evaw-pet-grooming.com";
-const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "애견미용 관련 모든정보";
+const SITE_NAME = "이바우펫 애견미용학원";
 const SITE_DESCRIPTION = "이바우펫 애견미용학원의 지역별 위치와 교육과정, 수강 비용·기간을 확인하세요. 3급·2급 애견미용자격증 준비부터 가정견 실습, 취업·창업과 국비지원·교육지원 조건까지 안내합니다.";
-const SITE_KEYWORDS = ["애견미용학원", "애견미용", "이바우펫", "애견미용사", "애견미용자격증", "가정견실습", "애견미용창업", "애견미용교육", "애견미용취업", "반려동물행동교정", "강남애견미용학원", "서울애견미용학원", "종로애견미용학원", "신림애견미용학원", "천호애견미용학원", "인천애견미용학원", "부천애견미용학원", "일산애견미용학원", "분당애견미용학원", "수원애견미용학원", "평택애견미용학원", "대전애견미용학원", "천안애견미용학원", "광주애견미용학원", "창원애견미용학원", "부산애견미용학원", "대구애견미용학원", "국비지원", "펫미용", "반려견미용", "애견미용학원추천"];
 // 메인 페이지 검색 제목 (검색어가 들어가도록)
-const HOME_TITLE = "애견미용학원 비용·기간·자격증·취업 정보 | 애견미용 관련 모든정보";
-const AUTHOR_NAME = process.env.NEXT_PUBLIC_AUTHOR_NAME || "이바우펫 애견미용학원";
+const HOME_TITLE = `애견미용학원 비용·기간·자격증·취업 정보 | ${SITE_NAME}`;
+const AUTHOR_NAME = SITE_NAME;
 
 export function getDefaultMetadata(): Metadata {
   return {
     metadataBase: new URL(SITE_URL),
     title: { absolute: HOME_TITLE },
     description: SITE_DESCRIPTION,
-    keywords: SITE_KEYWORDS,
     authors: [{ name: AUTHOR_NAME }],
     creator: AUTHOR_NAME,
     publisher: SITE_NAME,
@@ -71,7 +70,10 @@ export function getPostImage(post: Post): string {
 
 export function getPostMetadata(post: Post): Metadata {
   const url = `${SITE_URL}/blog/${post.slug}`;
-  const title = post.metaTitle || post.title;
+  const title = (post.metaTitle || post.title).replace(
+    /\s*[|｜–—-]\s*(?:이바우펫(?:\s*애견)?\s*미용학원|애견미용 관련 모든정보)\s*$/,
+    "",
+  );
   const description = post.metaDescription || post.excerpt;
   const image = getPostImage(post);
   const author = getPostAuthor(post);
@@ -107,7 +109,9 @@ export function getPostMetadata(post: Post): Metadata {
       images: [image],
     },
     alternates: { canonical },
-    robots: { index: true, follow: true, "max-image-preview": "large" },
+    robots: isPostIndexable(post.slug)
+      ? { index: true, follow: true, "max-image-preview": "large" }
+      : { index: false, follow: true, googleBot: { index: false, follow: true } },
   };
 }
 
@@ -124,12 +128,11 @@ export const CATEGORY_INFO: Record<string, { title: string; description: string 
   "국비지원": { title: "애견미용학원 국비지원과 자부담 확인", description: "고용24 과정의 국비지원 조건과 자부담을 확인하고, 학원 교육지원과 구분해 살펴보세요." },
 };
 
-export function getCategoryMetadata(category: string, count: number): Metadata {
+export function getCategoryMetadata(category: string): Metadata {
   const { title, description } = CATEGORY_INFO[category] ?? {
     title: `애견미용 ${category} 정보`,
     description: `${category}에 관한 애견미용 정보를 살펴보세요.`,
   };
-  const index = category === SEARCH_CATEGORY && count > 0;
 
   return {
     title,
@@ -147,7 +150,7 @@ export function getCategoryMetadata(category: string, count: number): Metadata {
       description,
     },
     alternates: { canonical: `${SITE_URL}/blog/category/${encodeURIComponent(category)}` },
-    robots: { index, follow: true, googleBot: { index, follow: true } },
+    robots: { index: false, follow: true, googleBot: { index: false, follow: true } },
   };
 }
 
@@ -181,4 +184,4 @@ export function getTagMetadata(tag: string, count: number): Metadata {
   };
 }
 
-export { SITE_URL, SITE_NAME, SITE_DESCRIPTION, SITE_KEYWORDS, AUTHOR_NAME };
+export { SITE_URL, SITE_NAME, SITE_DESCRIPTION, AUTHOR_NAME };
