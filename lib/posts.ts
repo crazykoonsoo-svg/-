@@ -1,5 +1,6 @@
 import { Post, Category, Tag } from "@/types/post";
 import { preparePublishedArticle } from "@/lib/content";
+import { articleLinkModifiedAt } from "@/lib/article-links";
 import { publicationTime } from "@/lib/publication";
 import { getPostExtraFields } from "@/lib/post-extra-fields";
 
@@ -48,6 +49,16 @@ function toPost(row: any): Post {
   };
 }
 
+function toPublishedPost(row: any): Post {
+  const post = toPost(row);
+  return { ...post, updatedAt: articleLinkModifiedAt(post.slug, post.updatedAt) };
+}
+
+function toPublishedArticle(row: any): Post {
+  const post = toPublishedPost(row);
+  return { ...post, content: preparePublishedArticle(post.content, post.slug) };
+}
+
 export async function getAllPosts(): Promise<Post[]> {
   const supabase = getSupabase();
   if (!supabase) {
@@ -59,7 +70,7 @@ export async function getAllPosts(): Promise<Post[]> {
     // 여기서 에러를 그냥 삼키면 사이트맵/홈페이지가 조용히 빈 목록을 반환해서 원인 파악이 어려웠습니다.
     console.error("[getAllPosts] Supabase 조회 실패:", JSON.stringify(error));
   }
-  return (data ?? []).map(toPost);
+  return (data ?? []).map(toPublishedPost);
 }
 
 export async function getRecentPostsForFeed(limit: number): Promise<Post[]> {
@@ -71,10 +82,7 @@ export async function getRecentPostsForFeed(limit: number): Promise<Post[]> {
     .order("published_at", { ascending: false })
     .limit(limit);
   if (error) throw error;
-  return (data ?? []).map(toPost).map((post: Post) => ({
-    ...post,
-    content: preparePublishedArticle(post.content, post.slug),
-  }));
+  return (data ?? []).map(toPublishedArticle);
 }
 
 export async function getAllPostsAdmin(): Promise<Post[]> {
@@ -89,10 +97,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   if (!supabase) return null;
   const { data } = await supabase.from("posts").select("*").eq("slug", slug).single();
   if (!data) return null;
-  const post = toPost(data);
-  return post.status === "published"
-    ? { ...post, content: preparePublishedArticle(post.content, post.slug) }
-    : post;
+  return data.status === "published" ? toPublishedArticle(data) : toPost(data);
 }
 
 export async function getRelatedPosts(post: Post, limit = 3): Promise<Post[]> {
