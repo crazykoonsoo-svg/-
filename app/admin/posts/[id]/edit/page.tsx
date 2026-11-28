@@ -9,6 +9,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
   const [wasPublished, setWasPublished] = useState(false);
+  const [tagInput, setTagInput] = useState<string | null>(null);
   const [publicationCorrection, setPublicationCorrection] = useState<string | undefined>();
   useEffect(() => {
     let active = true;
@@ -26,6 +27,18 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
   const change = (key: string, value: unknown) => setPost((p: any) => ({ ...p, [key]: value }));
   const save = async () => {
     if (!post.title.trim() || !post.content.trim()) { setError("제목과 본문을 입력해 주세요."); return; }
+    const originalTags: string[] = post.tags || [];
+    const tagsChanged = tagInput !== null && tagInput !== originalTags.join("\n");
+    const tags = tagsChanged
+      ? Array.from(new Set(tagInput.split("\n").map((tag) => tag.trim()).filter(Boolean)))
+      : originalTags;
+
+    const isPublished = post.status === "published";
+    if ((tagsChanged || (isPublished && !wasPublished)) && (tags.length > 5 || (isPublished && tags.length < 3))) {
+      setError(isPublished ? "공개 글에는 핵심 태그를 3~5개 입력해 주세요." : "태그는 5개까지 저장할 수 있습니다.");
+      return;
+    }
+
     setSaving(true); setError("");
     try {
       const res = await fetch(`/api/posts/${params.id}`, {
@@ -33,7 +46,7 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         body: JSON.stringify({
           publishedAt: publicationCorrection,
           title: post.title, slug: post.slug, excerpt: post.excerpt,
-          content: post.content, category: post.category, tags: post.tags,
+          content: post.content, category: post.category, tags,
           coverImage: post.cover_image, coverImageAlt: post.cover_image_alt,
           status: post.status, metaTitle: post.meta_title, metaDescription: post.meta_description,
           summary: post.summary || "",
@@ -42,7 +55,8 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
         })
       });
       if (!res.ok) throw new Error("저장하지 못했습니다. 입력 내용을 유지했습니다.");
-      router.push(`/blog/${post.slug}`); router.refresh();
+      router.push(isPublished ? `/blog/${post.slug}` : "/admin");
+      router.refresh();
     } catch (e: any) { setError(e.message); } finally { setSaving(false); }
   };
   if (!post) return <div className="max-w-4xl mx-auto p-8">{error || "글을 불러오는 중입니다."}</div>;
@@ -78,6 +92,14 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
       <span className="block font-semibold mb-2">{label}</span>
       <input className="w-full border rounded-lg p-3" value={post[key] || ""} onChange={e => change(key, e.target.value)} />
     </label>)}
+    <label className="block">
+      <span className="block font-semibold mb-2">핵심 태그 (3~5개)</span>
+      <textarea className="w-full border rounded-lg p-3 text-sm" rows={5}
+        value={tagInput ?? (post.tags || []).join("\n")}
+        onChange={e => setTagInput(e.target.value)}
+        aria-describedby="post-tag-help" />
+      <span id="post-tag-help" className="block text-sm text-gray-500 mt-2">한 줄에 태그 하나를 입력해 주세요. 중복 태그는 한 번만 저장됩니다.</span>
+    </label>
     <label className="block"><span className="block font-semibold mb-2">본문 HTML</span>
       <textarea className="w-full border rounded-lg p-3 font-mono text-sm" rows={24} value={post.content || ""} onChange={e => change("content", e.target.value)} />
     </label>
